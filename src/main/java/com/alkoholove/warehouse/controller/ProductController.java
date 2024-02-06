@@ -1,6 +1,7 @@
 package com.alkoholove.warehouse.controller;
 
 import com.alkoholove.warehouse.dto.ProductDto;
+import com.alkoholove.warehouse.entity.Product;
 import com.alkoholove.warehouse.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +18,22 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping(value = "{name}", produces = "application/json")
-    public ProductDto getProductByName(@PathVariable String name) {
+    public Product getProductByName(@PathVariable String name) {
         return productService.getProductByName(name);
     }
 
     @GetMapping(produces = "application/json")
-    public List<ProductDto> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @PutMapping(value = "{name}", produces = "application/json", consumes = "application/json")
-    public ProductDto updateNumberOfItems(@PathVariable String name, @RequestBody @Valid UpdateProductDto updateProductDto) {
-        return productService.updateNumberOfItems(name, updateProductDto);
+    public Product updateNumberOfItems(@PathVariable String name, @RequestBody @Valid ProductDto productDto) {
+        return productService.updateNumberOfItems(name, productDto);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
-    public ProductDto addProduct(@RequestBody @Valid ProductDto productDto) {
+    public Product addProduct(@RequestBody @Valid ProductDto productDto) {
         return productService.addProduct(productDto);
     }
 

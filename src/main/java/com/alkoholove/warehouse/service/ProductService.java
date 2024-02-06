@@ -1,6 +1,5 @@
 package com.alkoholove.warehouse.service;
 
-import com.alkoholove.warehouse.controller.UpdateProductDto;
 import com.alkoholove.warehouse.dto.ProductDto;
 import com.alkoholove.warehouse.entity.Product;
 import com.alkoholove.warehouse.entity.TypeOfPackage;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,41 +27,36 @@ public class ProductService {
         };
     }
 
-    public ProductDto getProductByName(String name) {
+    public Product getProductByName(String name) {
         Optional<Product> productOptional = productRepository.findByName(name);
-        return productOptional.map(product -> new ProductDto(product.getId(), product.getName(), product.getTypeOfPackage().label,
-                product.getNumberOfItems())).orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
+        return productOptional.orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
     }
 
-    public List<ProductDto> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        List<ProductDto> productDtos = new ArrayList<>();
-        for (Product product : products) {
-            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getTypeOfPackage().label, product.getNumberOfItems()));
-        }
-        return productDtos;
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
-    public ProductDto addProduct(ProductDto productDto) {
+    public Product addProduct(ProductDto productDto) {
         Product product = new Product(productDto.getName(), solveTypeOfPackage(productDto.getTypeOfPackage()),
                 productDto.getNumberOfItems());
         productRepository.save(product);
-        Product addedProduct = productRepository.findByName(productDto.getName()).orElseThrow(() -> new ResourceNotFoundException("Product with name " + productDto.getName() + " not found"));
-        return new ProductDto(addedProduct.getId(), addedProduct.getName(), addedProduct.getTypeOfPackage().label, addedProduct.getNumberOfItems());
+        return getProductByName(productDto.getName());
     }
 
-    public ProductDto updateNumberOfItems(String name, UpdateProductDto updateProductDto) {
+    public Product updateNumberOfItems(String name, ProductDto productDto) {
         Optional<Product> productOptional = productRepository.findByName(name);
-        Product product = productOptional.orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
-        product.setNumberOfItems(updateProductDto.getQuantity());
-        productRepository.save(product);
-        Product updatedProduct = productRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
-        return new ProductDto(updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getTypeOfPackage().label, updatedProduct.getNumberOfItems());
+        if (productOptional.isEmpty()) {
+            addProduct(productDto);
+        } else {
+            Product product = productOptional.get();
+            product.setNumberOfItems(productDto.getNumberOfItems());
+            productRepository.save(product);
+        }
+        return getProductByName(name);
     }
 
     public void deleteProduct(String name) {
-        Optional<Product> productOptional = productRepository.findByName(name);
-        Product product = productOptional.orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
+        Product product = getProductByName(name);
         productRepository.delete(product);
     }
 }

@@ -1,19 +1,22 @@
 package com.alkoholove.warehouse.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
 
 @Entity
-@Table(name = "product")
+@Table(name = "client")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,17 +27,12 @@ public class Product {
     @NotBlank(message = "Name is manadatory")
     private String name;
 
-    @Column(name = "typeOfPackage", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TypeOfPackage typeOfPackage;
+    @Column(name = "city", nullable = false)
+    @NotBlank(message = "City is mandatory")
+    private String city;
 
-    @Column(name = "numberOfItems")
-    private int numberOfItems;
-
-    public Product(String name, TypeOfPackage typeOfPackage, int numberOfItems) {
+    public Client(String name, String city) {
         this.name = name;
-        this.typeOfPackage = typeOfPackage;
-        this.numberOfItems = numberOfItems;
+        this.city = city;
     }
-
 }

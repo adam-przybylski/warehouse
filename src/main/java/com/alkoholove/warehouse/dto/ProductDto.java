@@ -2,21 +2,20 @@ package com.alkoholove.warehouse.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class ProductDto {
 
     @JsonProperty("id")
     private UUID id;
 
-    @NotNull
+    @NotNull(message = "Name cannot be null")
     @Size(min = 1, max = 250, message = "Name should have at least 1 character and maximum 250")
     @JsonProperty("name")
     private String name;
@@ -25,7 +24,7 @@ public class ProductDto {
     @Pattern(regexp = "bottle|carton|pack", message = "Type of package should be BOTTLE, CARTON or PACK")
     private String typeOfPackage;
 
-    @NotNull
+    @NotNull(message = "Number of items cannot be null")
     @Min(value = 0, message = "Number of items cannot be negative")
     @JsonProperty("numberOfItems")
     private int numberOfItems;
