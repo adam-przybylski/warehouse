@@ -1,8 +1,8 @@
 package com.alkoholove.warehouse.entity;
 
+import com.alkoholove.warehouse.enums.PackageType;
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
@@ -21,20 +21,19 @@ public class Product {
     private UUID id;
 
     @Column(name = "name", nullable = false, unique = true)
-    @NotBlank(message = "Name is manadatory")
     private String name;
 
-    @Column(name = "typeOfPackage", nullable = false)
+    @Column(name = "packageType", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TypeOfPackage typeOfPackage;
+    private PackageType unit;
 
     @Column(name = "numberOfItems")
-    private int numberOfItems;
+    private int numberOfUnits;
 
-    public Product(String name, TypeOfPackage typeOfPackage, int numberOfItems) {
+    public Product(String name, PackageType unit, int numberOfUnits) {
         this.name = name;
-        this.typeOfPackage = typeOfPackage;
-        this.numberOfItems = numberOfItems;
+        this.unit = unit;
+        this.numberOfUnits = numberOfUnits;
     }
 
 }

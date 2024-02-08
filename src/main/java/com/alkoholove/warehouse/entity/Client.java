@@ -24,11 +24,9 @@ public class Client {
     private UUID id;
 
     @Column(name = "name", nullable = false, unique = true)
-    @NotBlank(message = "Name is manadatory")
     private String name;
 
     @Column(name = "city", nullable = false)
-    @NotBlank(message = "City is mandatory")
     private String city;
 
     public Client(String name, String city) {

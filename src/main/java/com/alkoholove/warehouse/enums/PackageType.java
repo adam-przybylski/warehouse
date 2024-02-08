@@ -1,13 +1,13 @@
-package com.alkoholove.warehouse.entity;
+package com.alkoholove.warehouse.enums;
 
-public enum TypeOfPackage {
+public enum PackageType {
     BOTTLE("bottle"),
     PACK("pack"),
     CARTON("carton");
 
     public final String label;
 
-    private TypeOfPackage(String label){
+    private PackageType(String label){
         this.label = label;
     }
 

@@ -2,10 +2,12 @@ package com.alkoholove.warehouse.service;
 
 import com.alkoholove.warehouse.dto.ProductDto;
 import com.alkoholove.warehouse.entity.Product;
-import com.alkoholove.warehouse.entity.TypeOfPackage;
+import com.alkoholove.warehouse.enums.PackageType;
 import com.alkoholove.warehouse.exceptions.ResourceNotFoundException;
 import com.alkoholove.warehouse.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +19,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
-    private TypeOfPackage solveTypeOfPackage(String typeOfPackage) {
+
+    private PackageType solveTypeOfPackage(String typeOfPackage) {
         return switch (typeOfPackage) {
-            case "bottle" -> TypeOfPackage.BOTTLE;
-            case "carton" -> TypeOfPackage.CARTON;
-            case "pack" -> TypeOfPackage.PACK;
+            case "bottle" -> PackageType.BOTTLE;
+            case "carton" -> PackageType.CARTON;
+            case "pack" -> PackageType.PACK;
             default -> null;
         };
     }
@@ -37,9 +41,10 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDto productDto) {
-        Product product = new Product(productDto.getName(), solveTypeOfPackage(productDto.getTypeOfPackage()),
-                productDto.getNumberOfItems());
+        Product product = new Product(productDto.getName(), solveTypeOfPackage(productDto.getUnit()),
+                productDto.getNumberOfUnits());
         productRepository.save(product);
+        logger.info("Product with name " + productDto.getName() + " added");
         return getProductByName(productDto.getName());
     }
 
@@ -49,14 +54,21 @@ public class ProductService {
             addProduct(productDto);
         } else {
             Product product = productOptional.get();
-            product.setNumberOfItems(productDto.getNumberOfItems());
+            product.setNumberOfUnits(productDto.getNumberOfUnits());
             productRepository.save(product);
+            logger.info("Product with name " + productDto.getName() + " updated");
         }
         return getProductByName(name);
+    }
+
+    public void updateNumberOfItems(Product product) {
+        productRepository.save(product);
+        logger.info("Product with name " + product.getName() + " updated");
     }
 
     public void deleteProduct(String name) {
         Product product = getProductByName(name);
         productRepository.delete(product);
+        logger.info("Product with name " + product.getName() + " deleted");
     }
 }

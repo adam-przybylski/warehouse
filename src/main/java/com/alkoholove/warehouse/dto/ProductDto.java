@@ -20,29 +20,29 @@ public class ProductDto {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("typeOfPackage")
+    @JsonProperty("unit")
     @Pattern(regexp = "bottle|carton|pack", message = "Type of package should be BOTTLE, CARTON or PACK")
-    private String typeOfPackage;
+    private String unit;
 
     @NotNull(message = "Number of items cannot be null")
     @Min(value = 0, message = "Number of items cannot be negative")
-    @JsonProperty("numberOfItems")
-    private int numberOfItems;
+    @JsonProperty("numberOfUnits")
+    private int numberOfUnits;
 
     @JsonCreator
     public ProductDto(@JsonProperty("id") UUID id,
                       @JsonProperty("name") String name,
-                      @JsonProperty("typeOfPackage") String typeOfPackage,
-                      @JsonProperty("numberOfItems") int numberOfItems) {
+                      @JsonProperty("unit") String unit,
+                      @JsonProperty("numberOfUnits") int numberOfUnits) {
         this.id = id;
         this.name = name;
-        this.typeOfPackage = typeOfPackage;
-        this.numberOfItems = numberOfItems;
+        this.unit = unit;
+        this.numberOfUnits = numberOfUnits;
     }
 
-    public ProductDto(String name, String typeOfPackage, int numberOfItems) {
+    public ProductDto(String name, String unit, int numberOfUnits) {
         this.name = name;
-        this.typeOfPackage = typeOfPackage;
-        this.numberOfItems = numberOfItems;
+        this.unit = unit;
+        this.numberOfUnits = numberOfUnits;
     }
 }
