@@ -40,19 +40,24 @@ public class ReservationDto {
     @Pattern(regexp = "delivery|shipment", message = "Delivery type should be delivery or shipment")
     private String deliveryType;
 
+    @JsonProperty("isDelivered")
+    private boolean isDelivered;
+
     @JsonCreator
     public ReservationDto(@JsonProperty("id") UUID id,
                           @JsonProperty("clientName") String clientName,
                           @JsonProperty("products") ProductDto[] products,
                           @JsonProperty("deliveryDate") LocalDateTime deliveryDate,
                           @JsonProperty("paymentConfirmation") String paymentConfirmation,
-                          @JsonProperty("deliveryType") String deliveryType) {
+                          @JsonProperty("deliveryType") String deliveryType,
+                          @JsonProperty("isDelivered") boolean isDelivered) {
         this.id = id;
         this.clientName = clientName;
         this.products = products;
         this.deliveryDate = deliveryDate;
         this.paymentConfirmation = paymentConfirmation;
         this.deliveryType = deliveryType;
+        this.isDelivered = isDelivered;
     }
 
     public ReservationDto(String clientName, ProductDto[] products, LocalDateTime deliveryDate, String paymentConfirmation, String deliveryType) {

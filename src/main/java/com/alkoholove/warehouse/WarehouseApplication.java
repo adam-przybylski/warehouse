@@ -1,14 +1,10 @@
 package com.alkoholove.warehouse;
 
-import com.alkoholove.warehouse.entity.Client;
-import com.alkoholove.warehouse.entity.Product;
-import com.alkoholove.warehouse.entity.Reservation;
+import com.alkoholove.warehouse.entity.*;
 import com.alkoholove.warehouse.enums.DeliveryType;
 import com.alkoholove.warehouse.enums.PackageType;
 import com.alkoholove.warehouse.enums.PaymentConfirmation;
-import com.alkoholove.warehouse.repository.ClientRepository;
-import com.alkoholove.warehouse.repository.ProductRepository;
-import com.alkoholove.warehouse.repository.ReservationRepository;
+import com.alkoholove.warehouse.repository.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,21 +24,26 @@ public class WarehouseApplication {
         System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
         System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
         System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
+        System.setProperty("secret_key", dotenv.get("SECRET_KEY"));
 
         SpringApplication.run(WarehouseApplication.class, args);
     }
 
-//    @Bean
-//    CommandLineRunner runner(ClientRepository clientRepository, ProductRepository productRepository, ReservationRepository reservationRepository) {
-//        return args -> {
-//            Product product1 = new Product("Vodka", PackageType.BOTTLE, 40);
-//            productRepository.save(product1);
-//            Client client1 = new Client("John", "New York");
-//            clientRepository.save(client1);
-//            Reservation reservation1 = new Reservation(client1, List.of(product1), LocalDateTime.now(), LocalDateTime.now(), PaymentConfirmation.INVOICE, DeliveryType.DELIVERY);
-//            reservationRepository.save(reservation1);
-//        };
-//    }
+    @Bean
+    CommandLineRunner runner(AccountRepository accountRepository, AuthGrantedAuthorityRepository authGrantedAuthorityRepository) {
+        return args -> {
+            AuthGrantedAuthority admin = new AuthGrantedAuthority("ADMIN");
+            AuthGrantedAuthority user = new AuthGrantedAuthority("USER");
+            AuthGrantedAuthority viewer = new AuthGrantedAuthority("VIEWER");
+            authGrantedAuthorityRepository.saveAll(List.of(admin, user, viewer));
+            Account account = new Account("testAdmin", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", admin, true);
+            Account account1 = new Account("testUser", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", user, true);
+            Account account2 = new Account("viewer", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", viewer, true);
+            accountRepository.save(account);
+            accountRepository.save(account1);
+            accountRepository.save(account2);
+        };
+    }
 
 
 }
