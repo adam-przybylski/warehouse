@@ -61,3 +61,8 @@ build/
 ### ENV ###
 !**/.env
 .env
+
+## REACT ##
+/node_modules/
+/build/
+package-lock.json
