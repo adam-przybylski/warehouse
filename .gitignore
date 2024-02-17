@@ -63,6 +63,7 @@ build/
 .env
 
 ## REACT ##
-/node_modules/
-/build/
+**/node_modules/
+**/build/
+**/dist/
 package-lock.json

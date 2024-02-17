@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Your existing configurations -->
+
+    <!-- Exclude Spring Boot internal logs -->
+    <logger name="org.springframework" level="ERROR" />
+    <logger name="org.hibernate" level="ERROR" />
+    <logger name="org.apache" level="ERROR" />
+    <logger name="com.zaxxer" level="ERROR" />
+    <logger name="com.warehouse.WarehouseApplication" level="ERROR" />
+    <!-- Add other Spring Boot internal packages as needed -->
+
+    <!-- Your existing configurations -->
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Define the file appender -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>warehouse.log</file> <!-- Specify the file path and name -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+</configuration>
