@@ -67,3 +67,6 @@ build/
 **/build/
 **/dist/
 package-lock.json
+
+## SSL ##
+keystore.jks
