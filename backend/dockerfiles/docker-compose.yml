@@ -19,7 +19,13 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - "8081:8081"
+    command:
+      - 'php'
+      - '-S'
+      - '[::]:8081'
+      - '-t'
+      - '/var/www/html'
 
 volumes:
   pg:

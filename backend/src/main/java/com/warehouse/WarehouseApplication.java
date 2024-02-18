@@ -22,12 +22,23 @@ public class WarehouseApplication {
         System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
         System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
         System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
-        System.setProperty("secret_key", dotenv.get("SECRET_KEY"));
-        System.setProperty("server.ssl.key-store-password", dotenv.get("SSL_KEYSTORE_PASSWORD"));
-        System.setProperty("server.ssl.key-store", dotenv.get("SSL_KEYSTORE"));
-        System.setProperty("server.ssl.key-password", dotenv.get("SSL_KEY_PASSWORD"));
-        System.setProperty("frontend_url", dotenv.get("FRONTEND_URL"));
+        System.setProperty("SECRET_KEY", dotenv.get("SECRET_KEY"));
+        System.setProperty("FRONTEND_URL", dotenv.get("FRONTEND_URL"));
 
+        String keystorePassword = dotenv.get("SSL_KEYSTORE_PASSWORD");
+        if (keystorePassword != null) {
+            System.setProperty("server.ssl.key-store-password", keystorePassword);
+        }
+
+        String keystore = dotenv.get("SSL_KEYSTORE");
+        if (keystore != null) {
+            System.setProperty("server.ssl.key-store", keystore);
+        }
+
+        String sslEnabled = dotenv.get("SSL_ENABLED");
+        if (sslEnabled != null) {
+            System.setProperty("server.ssl.enabled", sslEnabled);
+        }
 
         SpringApplication.run(WarehouseApplication.class, args);
     }

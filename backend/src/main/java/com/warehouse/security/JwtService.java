@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = System.getProperty("secret_key");
+    private static final String SECRET_KEY = System.getProperty("SECRET_KEY");
 
     public String extractLogin(String token) {
         return extractClaim(token, Claims::getSubject);

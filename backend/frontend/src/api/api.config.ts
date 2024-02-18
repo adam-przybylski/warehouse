@@ -1,10 +1,8 @@
 import axios from 'axios'
-import * as https from 'https'
 
-export const API_URL = process.env.API_URL
 export const TIMEOUT_IN_MS = 30000
 
-const agent = new https.Agent({})
+const URL = import.meta.env.VITE_API_URL
 
 export const DEFAULT_HEADERS = {
     Accept: 'application/json',
@@ -13,15 +11,14 @@ export const DEFAULT_HEADERS = {
 }
 
 export const apiWithConfig = axios.create({
-    baseURL: API_URL,
+    baseURL: URL,
     timeout: TIMEOUT_IN_MS,
-    headers: DEFAULT_HEADERS,
-    httpsAgent: agent,
+    headers: DEFAULT_HEADERS
 })
 
 apiWithConfig.interceptors.request.use((config) => {
     const token = window.localStorage.getItem('token')
-    if (token && config.headers) config.headers.Authorization = JSON.parse(token)
+    if (token && config.headers) config.headers.Authorization = token
     return config
 })
 
