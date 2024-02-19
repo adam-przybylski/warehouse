@@ -8,6 +8,6 @@ export const api = {
         return apiWithConfig.post('/auth/authenticate', { username, password })
     },
     getCurrentAccount: (username: string | undefined): ApiResponseType<AccountType> => {
-        return apiWithConfig.get(`/api/v1/accounts/${username}`)
+        return apiWithConfig.get(`/accounts/${username}`)
     },
 }

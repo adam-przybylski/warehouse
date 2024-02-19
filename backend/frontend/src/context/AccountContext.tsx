@@ -1,5 +1,6 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {AccountType} from "../types/AccountType.ts";
+import {LoggedAccountType} from "../types/LoggedAccountType.ts";
 
 interface AccountState {
     account: AccountType | null
@@ -22,8 +23,10 @@ export const AccountStateContextProvider = ({children}: { children: ReactNode })
 
     useEffect(() => {
         if (loggedAccount?.token) {
-            localStorage.setItem('token', JSON.stringify(loggedAccount.token))
+            localStorage.setItem('token', loggedAccount.token)
         }
+        console.log('loggedAccount', loggedAccount)
+        console.log('account', account)
     }, [loggedAccount])
 
     return (

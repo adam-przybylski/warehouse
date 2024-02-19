@@ -8,10 +8,12 @@ import {LoginPageComponent} from "../pages/public/LoginPage";
 export const adminRoutes: RouteType[] = [
     {
         path: Pathnames.admin.accounts,
+        name: 'Konta użytkowników',
         Component: AccountsPageComponent,
     },
     {
         path: Pathnames.admin.accountDetails,
+        name: 'Szczegóły konta',
         Component: AccountDetailsPageComponent,
     }
 ]
@@ -19,6 +21,7 @@ export const adminRoutes: RouteType[] = [
 export const userRoutes: RouteType[] = [
     {
         path: Pathnames.user.home,
+        name: 'Strona główna',
         Component: HomePageComponent,
     },
 ]
@@ -26,6 +29,7 @@ export const userRoutes: RouteType[] = [
 export const viewerRoutes: RouteType[] = [
     {
         path: Pathnames.user.home,
+        name: 'Strona główna',
         Component: HomePageComponent,
     },
 ]
@@ -33,6 +37,7 @@ export const viewerRoutes: RouteType[] = [
 export const publicRoutes: RouteType[] = [
     {
         path: Pathnames.public.login,
+        name: 'Strona logowania',
         Component: LoginPageComponent,
     },
 ]

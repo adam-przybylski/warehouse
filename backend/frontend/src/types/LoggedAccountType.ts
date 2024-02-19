@@ -1,5 +1,7 @@
-interface LoggedAccountType {
+import {AccountTypeEnum} from "../enums/AccountTypeEnum.enum.ts";
+
+export interface LoggedAccountType {
     username?: string
-    role?: string
+    role: AccountTypeEnum
     token: string
 }

@@ -27,15 +27,16 @@ export const useAccount = () => {
     const isAdmin = loggedAccount?.role === AccountTypeEnum.ADMIN
     const isUser = loggedAccount?.role === AccountTypeEnum.USER || isAdmin
 
+
     const logIn = async (login: string, password: string) => {
         try {
             setIsLoggingIn(true)
             const {data} = await api.logIn(login, password)
             const decoded = jwtDecode<CustomJwtPayload>(data)
-            setLoggedAccount({username: decoded.sub, role: decoded.role, token: data})
+            setLoggedAccount({username: decoded.sub, role: decoded.role as AccountTypeEnum, token: data})
         } catch (error) {
-            alert('Logging in error!')
-            console.error(error)
+            alert('Błąd logowania! Spróbuj ponownie.')
+            console.error("Logging error" + error)
         } finally {
             setIsLoggingIn(false)
         }
@@ -44,13 +45,15 @@ export const useAccount = () => {
     const getCurrentAccount = async () => {
         try {
             setIsFetching(true)
-
-            if (localStorage.getItem('token')) {
-                const {data} = await api.getCurrentAccount(loggedAccount?.username)
+            const token = localStorage.getItem('token')
+            if (token) {
+                const decoded = jwtDecode<CustomJwtPayload>(token)
+                const {data} = await api.getCurrentAccount(decoded.sub)
+                setLoggedAccount({username: decoded.sub, role: decoded.role as AccountTypeEnum, token: token})
                 setAccount(data)
             }
         } catch {
-            alert('Unable to get current account!')
+            alert('Błąd podczas pobierania danych użytkownika!')
             logOut()
         } finally {
             setIsFetching(false)
