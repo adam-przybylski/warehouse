@@ -10,7 +10,7 @@ import {LockOutlined, Visibility, VisibilityOff} from "@mui/icons-material";
 import {useState} from "react";
 
 const schema = yup.object({
-    login: yup.string().required('Login is required').min(6, 'Must be at least 6 characters').max(20, 'Must be at most 20 characters'),
+    username: yup.string().required('Login is required').min(6, 'Must be at least 6 characters').max(20, 'Must be at most 20 characters'),
     password: yup.string().required('Password is required'),
 })
 
@@ -30,12 +30,12 @@ export const LoginPageComponent = () => {
         resolver: yupResolver(schema),
     })
 
-    const onSubmit = handleSubmit(({ login, password }) => {
-        logIn(login, password)
+    const onSubmit = handleSubmit(({ username, password }) => {
+        logIn(username, password)
     })
 
     if (isAuthenticated) {
-        return <Navigate to={Pathnames.viewer.home} replace />
+        return <Navigate to={Pathnames.viewer.availability} replace />
     }
 
     return (
@@ -48,24 +48,24 @@ export const LoginPageComponent = () => {
             </Typography>
             <form onSubmit={onSubmit}>
                 <TextField
-                    {...register('login')}
+                    {...register('username')}
                     margin="normal"
                     fullWidth
-                    id="login"
-                    label="Login"
-                    name="login"
-                    autoComplete="login"
+                    id="username"
+                    label="Nazwa użytkownika"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
                 />
                 <FormHelperText id="login" error>
-                    {errors?.login?.message}
+                    {errors?.username?.message}
                 </FormHelperText>
                 <TextField
                     {...register('password')}
                     margin="normal"
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="Hasło"
                     type={showPassword ? "text" : "password"}
                     id="password"
                     autoComplete="current-password"
@@ -73,7 +73,6 @@ export const LoginPageComponent = () => {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton
-                                    aria-label="toggle password visibility"
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
                                 >
@@ -87,7 +86,7 @@ export const LoginPageComponent = () => {
                     {errors?.password?.message}
                 </FormHelperText>
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                    Sign In
+                    Zaloguj się
                 </Button>
             </form>
         </FormContainer>

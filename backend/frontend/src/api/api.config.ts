@@ -25,6 +25,10 @@ apiWithConfig.interceptors.request.use((config) => {
 apiWithConfig.interceptors.response.use(
     (response) => response,
     (error) => {
+        const status = error.response?.status
+        if (status === 403) {
+            localStorage.removeItem('token')
+        }
         return Promise.reject(error)
     },
 )

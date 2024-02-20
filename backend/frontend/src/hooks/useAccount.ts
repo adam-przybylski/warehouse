@@ -4,6 +4,7 @@ import {AccountTypeEnum} from "../enums/AccountTypeEnum.enum.ts";
 import {api} from "../api/api.ts";
 import {jwtDecode, JwtPayload} from "jwt-decode";
 import {Pathnames} from "../router/pathnames.ts";
+import {useAlert} from "./useAlert.ts";
 
 interface CustomJwtPayload extends JwtPayload {
     role: string;
@@ -11,6 +12,7 @@ interface CustomJwtPayload extends JwtPayload {
 
 export const useAccount = () => {
     const navigate = useNavigate()
+    const { showErrorAlert } = useAlert()
     const {
         account,
         setAccount,
@@ -35,8 +37,8 @@ export const useAccount = () => {
             const decoded = jwtDecode<CustomJwtPayload>(data)
             setLoggedAccount({username: decoded.sub, role: decoded.role as AccountTypeEnum, token: data})
         } catch (error) {
-            alert('Błąd logowania! Spróbuj ponownie.' + JSON.stringify(error))
-            console.error("Logging error" + error)
+            showErrorAlert('Błąd logowania! Spróbuj ponownie.')
+            console.error("Logging error" + JSON.stringify(error))
         } finally {
             setIsLoggingIn(false)
         }
@@ -48,13 +50,14 @@ export const useAccount = () => {
             const token = localStorage.getItem('token')
             if (token) {
                 const decoded = jwtDecode<CustomJwtPayload>(token)
-                const {data} = await api.getCurrentAccount(decoded.sub)
+                const {data} = await api.getAccount(decoded.sub)
                 setLoggedAccount({username: decoded.sub, role: decoded.role as AccountTypeEnum, token: token})
                 setAccount(data)
             }
-        } catch {
-            alert('Błąd podczas pobierania danych użytkownika!')
+        } catch (error) {
             logOut()
+            showErrorAlert('Sesja wygasła! Zaloguj się ponownie.')
+            console.error(JSON.stringify(error))
         } finally {
             setIsFetching(false)
         }

@@ -6,6 +6,7 @@ import {AlertStateContextProvider} from "./context/AlertContext.tsx";
 import {AccountsStateContextProvider} from "./context/AccountsContext.tsx";
 import {Snackbar} from "@mui/material";
 import {useAlert} from "./hooks/useAlert.ts";
+import {AccountDetailsStateContextProvider} from "./context/AccountDetailsContext.tsx";
 
 const AlertListener = () => {
     const { alert, hideAlert } = useAlert()
@@ -22,8 +23,10 @@ function App() {
             <AlertStateContextProvider>
                 <AccountStateContextProvider>
                     <AccountsStateContextProvider>
-                        <AlertListener />
-                        <RoutesComponent />
+                        <AccountDetailsStateContextProvider>
+                            <AlertListener />
+                            <RoutesComponent />
+                        </AccountDetailsStateContextProvider>
                     </AccountsStateContextProvider>
                 </AccountStateContextProvider>
             </AlertStateContextProvider>

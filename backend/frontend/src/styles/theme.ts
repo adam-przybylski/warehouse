@@ -1,5 +1,14 @@
 import { createTheme } from '@mui/material'
 
+export const colors = {
+    primary: '#CC3A00',
+    secondary: '#B88400',
+    error: '#CC3A00',
+    warning: '#B4CC00',
+    info: '#00B8CC',
+    success: '#28E247',
+}
+
 export const authenticatedTheme = createTheme({
     palette: {
         primary: {
@@ -23,6 +32,3 @@ export const authenticatedTheme = createTheme({
     },
 })
 
-export const userTheme = createTheme({})
-
-export const viewerTheme = createTheme({})

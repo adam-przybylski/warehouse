@@ -3,7 +3,6 @@ export const Pathnames = {
         login: '/login',
     },
     viewer: {
-        home: '/',
         availability: '/availability',
         reservations: '/reservations',
     },
