@@ -2,11 +2,15 @@ export const Pathnames = {
     public: {
         login: '/login',
     },
-    user: {
+    viewer: {
         home: '/',
+        availability: '/availability',
+        reservations: '/reservations',
+    },
+    user: {
+        delivery: '/delivery',
     },
     admin: {
         accounts: '/accounts',
-        accountDetails: '/accounts/:login',
     },
 }

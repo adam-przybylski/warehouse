@@ -10,4 +10,7 @@ export const api = {
     getCurrentAccount: (username: string | undefined): ApiResponseType<AccountType> => {
         return apiWithConfig.get(`/accounts/${username}`)
     },
+    getAccounts: (): ApiResponseType<AccountType[]> => {
+        return apiWithConfig.get(`/accounts`)
+    },
 }

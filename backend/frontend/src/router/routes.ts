@@ -1,36 +1,43 @@
 import {Pathnames} from "./pathnames.ts";
 import {RouteType} from "../types/RouteType.ts";
 import {AccountsPageComponent} from "../pages/admin/AccountsPage";
-import {AccountDetailsPageComponent} from "../pages/admin/AccountDetailsPage";
 import {HomePageComponent} from "../pages/viewer/HomePage";
 import {LoginPageComponent} from "../pages/public/LoginPage";
+import {AvailabilityPageComponent} from "../pages/viewer/AvailabilityPage";
+import {ReservationsPageComponent} from "../pages/viewer/ReservationsPage";
+import {DeliveryPageComponent} from "../pages/user/DeliveryPage";
 
 export const adminRoutes: RouteType[] = [
     {
         path: Pathnames.admin.accounts,
         name: 'Konta użytkowników',
         Component: AccountsPageComponent,
-    },
-    {
-        path: Pathnames.admin.accountDetails,
-        name: 'Szczegóły konta',
-        Component: AccountDetailsPageComponent,
     }
 ]
 
 export const userRoutes: RouteType[] = [
     {
-        path: Pathnames.user.home,
-        name: 'Strona główna',
-        Component: HomePageComponent,
+        path: Pathnames.user.delivery,
+        name: 'Dostawa',
+        Component: DeliveryPageComponent,
     },
 ]
 
 export const viewerRoutes: RouteType[] = [
     {
-        path: Pathnames.user.home,
+        path: Pathnames.viewer.home,
         name: 'Strona główna',
         Component: HomePageComponent,
+    },
+    {
+        path: Pathnames.viewer.availability,
+        name: 'Stan magazynowy',
+        Component: AvailabilityPageComponent,
+    },
+    {
+        path: Pathnames.viewer.reservations,
+        name: 'Rezerwacje',
+        Component: ReservationsPageComponent,
     },
 ]
 

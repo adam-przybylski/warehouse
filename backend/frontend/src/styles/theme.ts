@@ -1,9 +1,9 @@
 import { createTheme } from '@mui/material'
 
-export const adminTheme = createTheme({
+export const authenticatedTheme = createTheme({
     palette: {
         primary: {
-            main: '#CC3A00',
+            main: '#006dcc'
         },
         secondary: {
             main: '#B88400',
@@ -24,3 +24,5 @@ export const adminTheme = createTheme({
 })
 
 export const userTheme = createTheme({})
+
+export const viewerTheme = createTheme({})

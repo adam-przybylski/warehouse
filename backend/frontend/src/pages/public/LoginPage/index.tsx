@@ -35,7 +35,7 @@ export const LoginPageComponent = () => {
     })
 
     if (isAuthenticated) {
-        return <Navigate to={Pathnames.user.home} replace />
+        return <Navigate to={Pathnames.viewer.home} replace />
     }
 
     return (

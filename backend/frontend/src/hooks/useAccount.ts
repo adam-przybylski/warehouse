@@ -35,7 +35,7 @@ export const useAccount = () => {
             const decoded = jwtDecode<CustomJwtPayload>(data)
             setLoggedAccount({username: decoded.sub, role: decoded.role as AccountTypeEnum, token: data})
         } catch (error) {
-            alert('Błąd logowania! Spróbuj ponownie.')
+            alert('Błąd logowania! Spróbuj ponownie.' + JSON.stringify(error))
             console.error("Logging error" + error)
         } finally {
             setIsLoggingIn(false)

@@ -5,9 +5,9 @@ import {useAccount} from "../../hooks/useAccount.ts";
 import {useEffect} from "react";
 import {PublicLayout} from "../../components/layouts/PublicLayout";
 import {ThemeProvider} from "@mui/material";
-import {adminTheme, userTheme} from "../../styles/theme.ts";
-import {UserLayout} from "../../components/layouts/UserLayout";
-import {AdminLayout} from "../../components/layouts/AdminLayout";
+import {authenticatedTheme} from "../../styles/theme.ts";
+import {AuthenticatedLayout} from "../../components/layouts/AuthenticatedLayout";
+import {LoaderComponent} from "../../components/Loader";
 
 export const RoutesComponent = () => {
 
@@ -19,7 +19,7 @@ export const RoutesComponent = () => {
         }
     }, [])
     if (isFetching) {
-        return <div>Loading</div>
+        return <LoaderComponent />
     }
 
 
@@ -36,37 +36,47 @@ export const RoutesComponent = () => {
                     }/>
             ))}
 
-            {/*{isAuthenticated &&*/}
-            {/*    viewerRoutes.map(({path, Component}) => (*/}
-            {/*        <Route key={path} path={path} element={<Component/>}/>*/}
-            {/*    ))}*/}
-
-
-            {isAuthenticated && isUser &&
-                userRoutes.map(({ path, Component, name }) => (
+            {isAuthenticated &&
+                viewerRoutes.map(({path, Component, name}) => (
                     <Route
                         key={path}
                         path={path}
                         element={
-                            <ThemeProvider theme={userTheme}>
-                                <UserLayout name={name}>
-                                    <Component />
-                                </UserLayout>
+                            <ThemeProvider theme={authenticatedTheme}>
+                                <AuthenticatedLayout name={name}>
+                                    <Component/>
+                                </AuthenticatedLayout>
+                            </ThemeProvider>
+                        }
+                    />
+                ))}
+
+
+            {isAuthenticated && isUser &&
+                userRoutes.map(({path, Component, name}) => (
+                    <Route
+                        key={path}
+                        path={path}
+                        element={
+                            <ThemeProvider theme={authenticatedTheme}>
+                                <AuthenticatedLayout name={name}>
+                                    <Component/>
+                                </AuthenticatedLayout>
                             </ThemeProvider>
                         }
                     />
                 ))}
 
             {isAuthenticated && isUser && isAdmin &&
-                adminRoutes.map(({ path, Component, name }) => (
+                adminRoutes.map(({path, Component, name}) => (
                     <Route
                         key={path}
                         path={path}
                         element={
-                            <ThemeProvider theme={adminTheme}>
-                                <AdminLayout name={name}>
-                                    <Component />
-                                </AdminLayout>
+                            <ThemeProvider theme={authenticatedTheme}>
+                                <AuthenticatedLayout name={name}>
+                                    <Component/>
+                                </AuthenticatedLayout>
                             </ThemeProvider>
                         }
                     />
