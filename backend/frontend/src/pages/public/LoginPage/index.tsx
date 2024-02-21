@@ -56,6 +56,7 @@ export const LoginPageComponent = () => {
                     name="username"
                     autoComplete="username"
                     autoFocus
+                    sx={{color:'white'}}
                 />
                 <FormHelperText id="login" error>
                     {errors?.username?.message}

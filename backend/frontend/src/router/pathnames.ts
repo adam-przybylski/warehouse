@@ -5,6 +5,7 @@ export const Pathnames = {
     viewer: {
         availability: '/availability',
         reservations: '/reservations',
+        clients: '/clients',
     },
     user: {
         delivery: '/delivery',

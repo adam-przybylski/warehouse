@@ -1,19 +1,20 @@
-import { useState } from 'react'
-import { api } from '../api/api'
-import { useAccountDetailsState } from '../context/AccountDetailsContext'
-import { useAlert } from './useAlert'
+import {useState} from 'react'
+import {api} from '../api/api'
+import {useAccountDetailsState} from '../context/AccountDetailsContext'
+import {useAlert} from './useAlert'
 
 export const useAccountDetails = () => {
-    const { showErrorAlert } = useAlert()
-    const { isFetching, setIsFetching, account, setAccount } = useAccountDetailsState()
+    const {showErrorAlert, showSuccessAlert} = useAlert()
+    const {isFetching, setIsFetching, account, setAccount} = useAccountDetailsState()
 
     const getAccountDetails = async (login: string) => {
         try {
             setIsFetching(true)
-            const { data } = await api.getAccount(login)
+            const {data} = await api.getAccount(login)
             setAccount(data)
-        } catch {
-            showErrorAlert('Nie znaleziono konta o podanej nazwie użytkownika')
+        } catch (err) {
+            console.error(err)
+            showErrorAlert('Nie znaleziono konta ' + login)
         } finally {
             setIsFetching(false)
         }
@@ -23,10 +24,10 @@ export const useAccountDetails = () => {
     const updatePassword = async (username: string | undefined, password: string) => {
         try {
             setIsUpdating(true)
-            await api.updatePassword(username, password)
+            await api.updatePassword(username, password).then(() => showSuccessAlert('Hasło konta ' + username + ' zostało zaktualizowane'))
         } catch (err) {
             console.error(err)
-            showErrorAlert('Wystąpił błąd podczas aktualizacji hasła')
+            showErrorAlert('Wystąpił błąd podczas aktualizacji hasła konta ' + username)
         } finally {
             setIsUpdating(false)
         }
@@ -35,10 +36,10 @@ export const useAccountDetails = () => {
     const enableAccount = async (username: string) => {
         try {
             setIsUpdating(true)
-            await api.enableAccount(username)
+            await api.enableAccount(username).then(() => showSuccessAlert('Konto ' + username + ' zostało odblokowane'))
         } catch (err) {
             console.error(err)
-            showErrorAlert('Wystąpił błąd podczas blokowania konta')
+            showErrorAlert('Wystąpił błąd podczas blokowania konta ' + username)
         } finally {
             setIsUpdating(false)
         }
@@ -47,10 +48,10 @@ export const useAccountDetails = () => {
     const disableAccount = async (username: string) => {
         try {
             setIsUpdating(true)
-            await api.disableAccount(username)
+            await api.disableAccount(username).then(() => showSuccessAlert('Konto ' + username + ' zostało zablokowane'))
         } catch (err) {
             console.error(err)
-            showErrorAlert('Wystąpił błąd podczas blokowania konta')
+            showErrorAlert('Wystąpił błąd podczas blokowania konta ' + username)
         } finally {
             setIsUpdating(false)
         }

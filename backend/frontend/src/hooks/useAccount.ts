@@ -12,7 +12,7 @@ interface CustomJwtPayload extends JwtPayload {
 
 export const useAccount = () => {
     const navigate = useNavigate()
-    const { showErrorAlert } = useAlert()
+    const { showErrorAlert, showSuccessAlert } = useAlert()
     const {
         account,
         setAccount,
@@ -69,6 +69,7 @@ export const useAccount = () => {
         setLoggedAccount(null)
         navigate(Pathnames.public.login)
         setIsFetching(false)
+        showSuccessAlert('Pomyślnie wylogowano!')
     }
 
     return {

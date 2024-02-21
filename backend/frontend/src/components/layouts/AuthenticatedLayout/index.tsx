@@ -45,10 +45,27 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                     </Button>
                 </Toolbar>
                 {showBox &&
-                    <Toolbar sx={{flexDirection: 'column', alignItems: 'center'}}>
+                    <Toolbar sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                        <Button
+                            onClick={() => {
+                                setShowBox(false)
+                                navigate(Pathnames.viewer.clients)
+                            }}
+                            sx={{
+                                my: 1, color: 'white',
+                                '&:hover': {
+                                    backgroundColor: '#277ec9',
+                                },
+                            }}
+                        >
+                            Klienci
+                        </Button>
 
                         <Button
-                            onClick={() => navigate(Pathnames.viewer.availability)}
+                            onClick={() => {
+                                setShowBox(false)
+                                navigate(Pathnames.viewer.availability)
+                            }}
                             sx={{
                                 my: 1, color: 'white',
                                 '&:hover': {
@@ -59,7 +76,10 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                             Stan magazynowy
                         </Button>
                         <Button
-                            onClick={() => navigate(Pathnames.viewer.reservations)}
+                            onClick={() => {
+                                setShowBox(false)
+                                navigate(Pathnames.viewer.reservations)
+                            }}
                             sx={{
                                 my: 1, color: 'white', '&:hover': {
                                     backgroundColor: '#277ec9',
@@ -70,7 +90,10 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                         </Button>
                         {isUser && (
                             <Button
-                                onClick={() => navigate(Pathnames.user.delivery)}
+                                onClick={() => {
+                                    setShowBox(false)
+                                    navigate(Pathnames.user.delivery)
+                                }}
                                 sx={{
                                     my: 1, color: 'white', '&:hover': {
                                         backgroundColor: '#277ec9',
@@ -82,7 +105,10 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                         )}
                         {isAdmin && (
                             <Button
-                                onClick={() => navigate(Pathnames.admin.accounts)}
+                                onClick={() => {
+                                    setShowBox(false)
+                                    navigate(Pathnames.admin.accounts)
+                                }}
                                 sx={{
                                     my: 1, color: 'white', '&:hover': {
                                         backgroundColor: '#277ec9',

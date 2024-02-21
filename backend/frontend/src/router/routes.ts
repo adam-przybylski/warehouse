@@ -5,6 +5,7 @@ import {LoginPageComponent} from "../pages/public/LoginPage";
 import {AvailabilityPageComponent} from "../pages/viewer/AvailabilityPage";
 import {ReservationsPageComponent} from "../pages/viewer/ReservationsPage";
 import {DeliveryPageComponent} from "../pages/user/DeliveryPage";
+import {ClientsPageComponent} from "../pages/viewer/ClientsPage";
 
 export const adminRoutes: RouteType[] = [
     {
@@ -32,6 +33,11 @@ export const viewerRoutes: RouteType[] = [
         path: Pathnames.viewer.reservations,
         name: 'Rezerwacje',
         Component: ReservationsPageComponent,
+    },
+    {
+        path: Pathnames.viewer.clients,
+        name: 'Klienci',
+        Component: ClientsPageComponent,
     },
 ]
 

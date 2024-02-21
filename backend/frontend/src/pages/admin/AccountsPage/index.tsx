@@ -19,12 +19,19 @@ export const AccountsPageComponent = () => {
 
     const {isUpdating, enableAccount, disableAccount} = useAccountDetails()
 
+    useEffect(() => {
+        if (!accounts) {
+            fetchAccounts()
+        }
+    }, [])
+
     const openCreateModal = () => {
         setIsCreateModalOpen(true)
     }
 
     const closeCreateModal = () => {
         setIsCreateModalOpen(false)
+        fetchAccounts()
     }
 
     const handleEnableDisableAccount = (username: string, enabled: undefined | boolean) => {
@@ -47,11 +54,6 @@ export const AccountsPageComponent = () => {
         setIsUpdatePasswordModalOpen(false)
     }
 
-    useEffect(() => {
-        if (!accounts) {
-            fetchAccounts()
-        }
-    }, [])
 
     const renderTable = () => {
         if (!accounts || accounts.length === 0) {
@@ -59,13 +61,14 @@ export const AccountsPageComponent = () => {
         }
 
         return (
-            <Table sx={{minWidth: 450}} aria-label="simple table">
+            <Table sx={{minWidth: 450}}>
                 <TableHead sx={{background: '#605f5f'}}>
                     <TableRow>
                         <TableCell sx={{color: '#ffffff', fontSize: '1.2rem'}}>Nazwa użytkownika</TableCell>
                         <TableCell sx={{color: '#ffffff', fontSize: '1.2rem', textAlign: 'center'}}>Rola</TableCell>
-                        <TableCell
-                            sx={{color: '#ffffff', fontSize: '1.2rem', textAlign: 'center'}}>Zablokowany</TableCell>
+                        <TableCell sx={{color: '#ffffff', fontSize: '1.2rem', textAlign: 'center'}}>
+                            Zablokowany
+                        </TableCell>
                         <TableCell sx={{color: '#ffffff', fontSize: '1.2rem'}}></TableCell>
                     </TableRow>
                 </TableHead>
@@ -76,18 +79,18 @@ export const AccountsPageComponent = () => {
                             key={id}
                             hover
                         >
-                            <TableCell component="th" scope="row" sx={{fontSize: '1.2rem'}}>
+                            <TableCell component="th" scope="row" sx={{fontSize: '1.1rem'}}>
                                 {username}
                             </TableCell>
-                            <TableCell component="th" scope="row" sx={{fontSize: '1.2rem', textAlign: 'center'}}>
+                            <TableCell component="th" scope="row" sx={{fontSize: '1.1rem', textAlign: 'center'}}>
                                 {role == 'ADMIN' ? 'Administrator' : ''}
                                 {role == 'USER' ? 'Użytkownik' : ''}
                                 {role == 'VIEWER' ? 'Przeglądający' : ''}
                             </TableCell>
-                            <TableCell component="th" scope="row" sx={{fontSize: '1.2rem', textAlign: 'center'}}>
+                            <TableCell component="th" scope="row" sx={{fontSize: '1.1rem', textAlign: 'center'}}>
                                 {enabled ? 'Nie' : 'Tak'}
                             </TableCell>
-                            <TableCell component="th" scope="row" sx={{fontSize: '1.2rem'}}>
+                            <TableCell component="th" scope="row" sx={{fontSize: '1.1rem'}}>
                                 <ButtonsContainer>
                                     <Button sx={{padding: 0}} onClick={(e) => {
                                         e.stopPropagation()
@@ -95,14 +98,14 @@ export const AccountsPageComponent = () => {
                                     }}>
                                         Zmień hasło
                                     </Button>
-                                    {!isUpdating &&
-                                        <Button sx={{padding: 0}} onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleEnableDisableAccount(username, enabled)
-                                        }}>
-                                            {enabled ? 'Zablokuj' : 'Odblokuj'}
-                                        </Button>
-                                    }
+
+                                    <Button sx={{padding: 0}} disabled={isUpdating} onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleEnableDisableAccount(username, enabled)
+                                    }}>
+                                        {enabled ? 'Zablokuj' : 'Odblokuj'}
+                                    </Button>
+
                                 </ButtonsContainer>
 
                             </TableCell>

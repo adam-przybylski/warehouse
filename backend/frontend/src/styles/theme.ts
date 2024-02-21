@@ -6,7 +6,7 @@ export const colors = {
     error: '#CC3A00',
     warning: '#B4CC00',
     info: '#00B8CC',
-    success: '#28E247',
+    success: '#03b221',
 }
 
 export const authenticatedTheme = createTheme({

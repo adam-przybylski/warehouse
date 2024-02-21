@@ -1,5 +1,5 @@
 import {Button, Modal, Typography} from '@mui/material'
-import {ReactElement} from 'react'
+import {ReactElement, useEffect} from 'react'
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from './styles'
 
 export interface ModalProps {
@@ -19,6 +19,20 @@ export const ModalComponent = (
         handleClose,
         children,
     }: ModalProps) => {
+
+    useEffect(() => {
+        const listener = (event: KeyboardEvent) => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                event.preventDefault();
+                handleConfirm();
+            }
+        };
+        document.addEventListener("keydown", listener);
+        return () => {
+            document.removeEventListener("keydown", listener);
+        };
+    }, []);
+
     return (
         <Modal
             open={open}

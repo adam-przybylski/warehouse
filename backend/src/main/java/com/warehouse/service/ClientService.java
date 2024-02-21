@@ -26,6 +26,9 @@ public class ClientService {
 
     public Client addClient(ClientDto clientDto) {
         Client client = new Client(clientDto.getName(), clientDto.getCity());
+        if(clientRepository.findByName(clientDto.getName()).isPresent()) {
+            throw new IllegalArgumentException("Client with name " + clientDto.getName() + " already exists");
+        }
         clientRepository.save(client);
         return getClientByName(clientDto.getName());
     }

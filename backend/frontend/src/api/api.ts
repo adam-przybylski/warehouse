@@ -1,12 +1,14 @@
 import {apiWithConfig} from "./api.config.ts";
 import {ApiResponseType} from "../types/ApiResponseType.ts";
 import {AccountType} from "../types/AccountType.ts";
+import {ClientType} from "../types/ClientType.ts";
 
 
 export const api = {
     logIn: (username: string, password: string): ApiResponseType<string> => {
         return apiWithConfig.post('/auth/authenticate', { username, password })
     },
+
     getAccount: (username: string | undefined): ApiResponseType<AccountType> => {
         return apiWithConfig.get(`/accounts/${username}`)
     },
@@ -25,4 +27,18 @@ export const api = {
     addAccount: (account: AccountType): ApiResponseType<AccountType> => {
         return apiWithConfig.post(`/accounts`, {...account})
     },
+
+    getClients:(): ApiResponseType<ClientType[]> => {
+        return apiWithConfig.get(`/clients`)
+    },
+    getClient: (username: string): ApiResponseType<ClientType> => {
+        return apiWithConfig.get(`/clients/${username}`)
+    },
+    addClient: (client: ClientType): ApiResponseType<ClientType> => {
+        return apiWithConfig.post(`/clients`, {...client})
+    },
+    deleteClient: (username: string): ApiResponseType<ClientType> => {
+        return apiWithConfig.delete(`/clients/${username}`)
+    }
+
 }
