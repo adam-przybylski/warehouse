@@ -32,6 +32,11 @@ public class ProductController {
         return productService.updateNumberOfItems(name, productDto);
     }
 
+    @PutMapping(produces = "application/json", consumes = "application/json")
+    public List<Product> updateProducts(@RequestBody @Valid List<ProductDto> productDtos) {
+        return productService.updateProducts(productDtos);
+    }
+
     @PostMapping(produces = "application/json", consumes = "application/json")
     public Product addProduct(@RequestBody @Valid ProductDto productDto) {
         return productService.addProduct(productDto);

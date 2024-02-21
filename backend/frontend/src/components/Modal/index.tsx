@@ -37,8 +37,6 @@ export const ModalComponent = (
         <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
         >
             <ModalContent>
                 {title && (

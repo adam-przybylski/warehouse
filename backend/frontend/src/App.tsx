@@ -8,6 +8,8 @@ import {useAlert} from "./hooks/useAlert.ts";
 import {AccountDetailsStateContextProvider} from "./context/AccountDetailsContext.tsx";
 import {ClientsStateContextProvider} from "./context/ClientsContext.tsx";
 import {colors} from "./styles/theme.ts";
+import {ProductsStateContextProvider} from "./context/ProductsContext.tsx";
+import {useEffect} from "react";
 
 const AlertListener = () => {
     const {alert, hideAlert} = useAlert()
@@ -24,6 +26,10 @@ const AlertListener = () => {
 
 function App() {
 
+    useEffect(() => {
+        document.title = "Hurtownia"
+    }, [])
+
     return (
         <>
             {/*<GlobalStyles*/}
@@ -36,8 +42,10 @@ function App() {
                         <AccountsStateContextProvider>
                             <AccountDetailsStateContextProvider>
                                 <ClientsStateContextProvider>
-                                    <AlertListener/>
-                                    <RoutesComponent/>
+                                    <ProductsStateContextProvider>
+                                        <AlertListener/>
+                                        <RoutesComponent/>
+                                    </ProductsStateContextProvider>
                                 </ClientsStateContextProvider>
                             </AccountDetailsStateContextProvider>
                         </AccountsStateContextProvider>

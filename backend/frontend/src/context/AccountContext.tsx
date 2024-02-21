@@ -25,8 +25,6 @@ export const AccountStateContextProvider = ({children}: { children: ReactNode })
         if (loggedAccount?.token) {
             localStorage.setItem('token', loggedAccount.token)
         }
-        console.log('loggedAccount', loggedAccount)
-        console.log('account', account)
     }, [loggedAccount])
 
     return (

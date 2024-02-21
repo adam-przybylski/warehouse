@@ -1,18 +1,44 @@
 import {useClients} from "../../../hooks/useClients.ts";
 import {useEffect, useState} from "react";
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField
+} from "@mui/material";
 import {LoaderComponent} from "../../../components/Loader";
 import {AddClientModalComponent} from "../../../components/AddClientModal";
+import {ClientType} from "../../../types/ClientType.ts";
 
 export const ClientsPageComponent = () => {
     const {clients, isFetching, fetchClients, isDeleting, deleteClient} = useClients()
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+    const [filteredClients, setFilteredClients] = useState<ClientType[] | null>([]);
 
     useEffect(() => {
         if (!clients) {
             fetchClients()
         }
     }, []);
+
+    useEffect(() => {
+        filterClients('')
+    }, [clients]);
+
+    const filterClients = (search: string) => {
+        if (search.length === 0 || search === '' || search === null) {
+            setFilteredClients(clients)
+        }
+        const filtered = clients?.filter((client) => {
+            return client.name.toLowerCase().includes(search.toLowerCase())
+        })
+        setFilteredClients(filtered ?? [])
+    }
 
     const openAddClientModal = () => {
         setIsCreateModalOpen(true)
@@ -29,7 +55,7 @@ export const ClientsPageComponent = () => {
 
 
     const renderTable = () => {
-        if (!clients) {
+        if (!filteredClients || filteredClients.length === 0) {
             return <div>Brak wyników</div>
         }
 
@@ -44,7 +70,7 @@ export const ClientsPageComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                    {clients.map((client) => (
+                    {filteredClients.map((client) => (
                         <TableRow
                             key={client.id}
                             hover
@@ -72,12 +98,20 @@ export const ClientsPageComponent = () => {
 
     return (
         <div>
-            <Button onClick={fetchClients} disabled={isFetching} sx={{my: 2}}>
-                Odśwież
-            </Button>
-            <Button onClick={openAddClientModal} sx={{my: 2}}>
-                Dodaj nowego klienta
-            </Button>
+            <div style={{display: 'flex'}}>
+                <Button variant="contained" onClick={fetchClients} disabled={isFetching} sx={{my: 2, mr: 1}}>
+                    Odśwież
+                </Button>
+                <Button variant="contained" onClick={openAddClientModal} sx={{my: 2}}>
+                    Dodaj nowego klienta
+                </Button>
+                <TextField
+                    type="text"
+                    label="Szukaj"
+                    onChange={(event) => filterClients(event.target.value)}
+                    sx={{ml: 'auto'}}
+                />
+            </div>
 
             <TableContainer component={Paper}>
                 {isFetching ? <LoaderComponent small/> : renderTable()}

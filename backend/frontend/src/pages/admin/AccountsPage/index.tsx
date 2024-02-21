@@ -36,7 +36,6 @@ export const AccountsPageComponent = () => {
 
     const handleEnableDisableAccount = (username: string, enabled: undefined | boolean) => {
         if (enabled) {
-            console.log({enabled})
             disableAccount(username).then(() => fetchAccounts())
         } else {
             enableAccount(username).then(() => fetchAccounts())
@@ -118,10 +117,10 @@ export const AccountsPageComponent = () => {
 
     return (
         <div>
-            <Button onClick={fetchAccounts} disabled={isFetching} sx={{my: 2}}>
+            <Button variant="contained" onClick={fetchAccounts} disabled={isFetching} sx={{my: 2, mr: 1}}>
                 Odśwież
             </Button>
-            <Button onClick={openCreateModal}>Dodaj konto</Button>
+            <Button variant="contained" onClick={openCreateModal}>Dodaj konto</Button>
 
             <TableContainer component={Paper}>
                 {isFetching ? <LoaderComponent small/> : renderTable()}

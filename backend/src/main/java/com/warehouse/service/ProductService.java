@@ -54,11 +54,18 @@ public class ProductService {
             addProduct(productDto);
         } else {
             Product product = productOptional.get();
-            product.setNumberOfUnits(productDto.getNumberOfUnits());
+            product.setNumberOfUnits(productDto.getNumberOfUnits() + product.getNumberOfUnits());
             productRepository.save(product);
             logger.info("Product with name " + productDto.getName() + " updated");
         }
         return getProductByName(name);
+    }
+
+    public List<Product> updateProducts(List<ProductDto> productDtos) {
+        for (ProductDto productDto : productDtos) {
+            updateNumberOfItems(productDto.getName(), productDto);
+        }
+        return getAllProducts();
     }
 
     public void updateNumberOfItems(Product product) {
