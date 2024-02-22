@@ -10,6 +10,7 @@ import {ClientsStateContextProvider} from "./context/ClientsContext.tsx";
 import {colors} from "./styles/theme.ts";
 import {ProductsStateContextProvider} from "./context/ProductsContext.tsx";
 import {useEffect} from "react";
+import {ReservationStateContextProvider} from "./context/ReservationContext.tsx";
 
 const AlertListener = () => {
     const {alert, hideAlert} = useAlert()
@@ -43,8 +44,10 @@ function App() {
                             <AccountDetailsStateContextProvider>
                                 <ClientsStateContextProvider>
                                     <ProductsStateContextProvider>
-                                        <AlertListener/>
-                                        <RoutesComponent/>
+                                        <ReservationStateContextProvider>
+                                            <AlertListener/>
+                                            <RoutesComponent/>
+                                        </ReservationStateContextProvider>
                                     </ProductsStateContextProvider>
                                 </ClientsStateContextProvider>
                             </AccountDetailsStateContextProvider>

@@ -14,9 +14,9 @@ export const useProducts = () => {
             const {data} = await api.getProducts()
             const sortedProducts = data.sort((a: ProductType, b: ProductType) => a.name.localeCompare(b.name))
             setProducts(sortedProducts)
-        } catch (error) {
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas pobierania produktów')
+            showErrorAlert(error.response.data)
         } finally {
             setIsFetching(false)
         }
@@ -28,9 +28,9 @@ export const useProducts = () => {
         try {
             setIsCreating(true)
             await api.addProduct(product).then(() => showSuccessAlert('Produkt ' + product.name +' został dodany'))
-        } catch (error) {
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas dodawania produktu ' + product.name)
+            showErrorAlert(error.response.data)
         } finally {
             setIsCreating(false)
         }
@@ -42,9 +42,9 @@ export const useProducts = () => {
         try {
             setIsDeleting(true)
             await api.deleteProduct(name).then(() => showSuccessAlert('Produkt ' + name +' został usunięty'))
-        } catch (error){
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas usuwania produktu ' + name)
+            showErrorAlert(error.response.data)
         } finally {
             setIsDeleting(false)
         }
@@ -56,9 +56,9 @@ export const useProducts = () => {
         try {
             setIsUpdating(true)
             await api.updateNumberOfProductItems(product).then(() => showSuccessAlert('Produkt ' + product.name +' został zaktualizowany'))
-        } catch (error){
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas aktualizacji produktu ' + product.name)
+            showErrorAlert(error.response.data)
         } finally {
             setIsUpdating(false)
         }
@@ -68,9 +68,9 @@ export const useProducts = () => {
         try {
             setIsUpdating(true)
             await api.updateProducts(products).then(() => showSuccessAlert('Produkty zostały zaktualizowane'))
-        } catch (error){
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas aktualizacji produktów')
+            showErrorAlert(error.response.data)
         } finally {
             setIsUpdating(false)
         }

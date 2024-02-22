@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,27 +18,27 @@ public class ReservationDto {
     @JsonProperty("id")
     private UUID id;
 
-    @NotNull(message = "Client name cannot be null")
-    @Size(min = 1, message = "Client name should have at least 1 character")
+    @NotNull(message = "Klient nie może być pusty")
+    @Size(min = 1, message = "Nazwa klienta powinna mieć co najmniej 1 znak")
     @JsonProperty("clientName")
     private String clientName;
 
     @NotNull(message = "Products cannot be null")
-    @Size(min = 1, message = "There should be at least one product")
+    @Size(min = 1, message = "Zamówienie musi zawierać co najmniej 1 produkt")
     @JsonProperty("products")
     private ProductDto[] products;
 
     @JsonProperty("deliveryDate")
     @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime deliveryDate;
+            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate deliveryDate;
 
     @JsonProperty("paymentConfirmation")
-    @Pattern(regexp = "invoice|receipt", message = "Payment confirmation should be invoice or receipt")
+    @Pattern(regexp = "invoice|receipt|gift", message = "Payment confirmation should be invoice or receipt")
     private String paymentConfirmation;
 
     @JsonProperty("deliveryType")
-    @Pattern(regexp = "delivery|shipment", message = "Delivery type should be delivery or shipment")
+    @Pattern(regexp = "delivery|shipment|gift", message = "Delivery type should be delivery or shipment")
     private String deliveryType;
 
     @JsonProperty("isDelivered")
@@ -47,7 +48,7 @@ public class ReservationDto {
     public ReservationDto(@JsonProperty("id") UUID id,
                           @JsonProperty("clientName") String clientName,
                           @JsonProperty("products") ProductDto[] products,
-                          @JsonProperty("deliveryDate") LocalDateTime deliveryDate,
+                          @JsonProperty("deliveryDate") LocalDate deliveryDate,
                           @JsonProperty("paymentConfirmation") String paymentConfirmation,
                           @JsonProperty("deliveryType") String deliveryType,
                           @JsonProperty("isDelivered") boolean isDelivered) {
@@ -60,7 +61,7 @@ public class ReservationDto {
         this.isDelivered = isDelivered;
     }
 
-    public ReservationDto(String clientName, ProductDto[] products, LocalDateTime deliveryDate, String paymentConfirmation, String deliveryType) {
+    public ReservationDto(String clientName, ProductDto[] products, LocalDate deliveryDate, String paymentConfirmation, String deliveryType) {
         this.clientName = clientName;
         this.products = products;
         this.deliveryDate = deliveryDate;

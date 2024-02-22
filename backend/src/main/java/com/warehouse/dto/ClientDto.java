@@ -14,13 +14,13 @@ public class ClientDto {
     @JsonProperty("id")
     private UUID id;
 
-    @NotNull(message = "Name cannot be null")
-    @Size(min = 1, max = 250, message = "Name should have at least 1 character and maximum 250")
+    @NotNull(message = "Nazwa nie może być pusta")
+    @Size(min = 1, max = 250, message = "Nazwa powinna mieć co najmniej 1 znak i maksymalnie 250 znaków")
     @JsonProperty("name")
     private String name;
 
-    @NotNull(message = "City cannot be null")
-    @Size(min = 1, max = 250, message = "City should have at least 1 character and maximum 250")
+    @NotNull(message = "Miasto nie może być puste")
+    @Size(min = 1, max = 250, message = "Miasto powinno mieć co najmniej 1 znak i maksymalnie 250 znaków")
     @JsonProperty("city")
     private String city;
 

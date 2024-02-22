@@ -4,11 +4,12 @@ export const Pathnames = {
     },
     viewer: {
         availability: '/availability',
-        reservations: '/reservations',
         clients: '/clients',
+        reservationsHistory: '/reservations-history',
     },
     user: {
         delivery: '/delivery',
+        reservations: '/reservations',
     },
     admin: {
         accounts: '/accounts',

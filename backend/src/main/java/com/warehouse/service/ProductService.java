@@ -33,7 +33,7 @@ public class ProductService {
 
     public Product getProductByName(String name) {
         Optional<Product> productOptional = productRepository.findByName(name);
-        return productOptional.orElseThrow(() -> new ResourceNotFoundException("Product with name " + name + " not found"));
+        return productOptional.orElseThrow(() -> new ResourceNotFoundException("Produkt o nazwie " + name + " nie istnieje"));
     }
 
     public List<Product> getAllProducts() {
@@ -44,7 +44,7 @@ public class ProductService {
         Product product = new Product(productDto.getName(), solveTypeOfPackage(productDto.getUnit()),
                 productDto.getNumberOfUnits());
         productRepository.save(product);
-        logger.info("Product with name " + productDto.getName() + " added");
+        logger.info("Produkt o nazwie " + productDto.getName() + " został dodany");
         return getProductByName(productDto.getName());
     }
 
@@ -56,7 +56,7 @@ public class ProductService {
             Product product = productOptional.get();
             product.setNumberOfUnits(productDto.getNumberOfUnits() + product.getNumberOfUnits());
             productRepository.save(product);
-            logger.info("Product with name " + productDto.getName() + " updated");
+            logger.info("Produkt o nazwie " + product.getName() + " został zaktualizowany");
         }
         return getProductByName(name);
     }

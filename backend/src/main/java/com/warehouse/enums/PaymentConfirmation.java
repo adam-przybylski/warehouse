@@ -3,7 +3,9 @@ package com.warehouse.enums;
 public enum PaymentConfirmation {
     RECEIPT("receipt"),
 
-    INVOICE("invoice");
+    INVOICE("invoice"),
+
+    GIFT("gift");
 
     public final String label;
 

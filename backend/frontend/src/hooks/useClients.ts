@@ -14,9 +14,9 @@ export const useClients = () => {
             const {data} = await api.getClients()
             const sortedClients = data.sort((a: ClientType, b: ClientType) => a.name.localeCompare(b.name))
             setClients(sortedClients)
-        } catch (error) {
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas pobierania klientów')
+            showErrorAlert(error.response.data)
         } finally {
             setIsFetching(false)
         }
@@ -28,9 +28,9 @@ export const useClients = () => {
         try {
             setIsCreating(true)
             await api.addClient(client).then(() => showSuccessAlert('Klient ' + client.name +' został utworzony'))
-        } catch (error) {
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas tworzenia klienta ' + client.name)
+            showErrorAlert(error.response.data)
         } finally {
             setIsCreating(false)
         }
@@ -42,9 +42,9 @@ export const useClients = () => {
         try {
             setIsDeleting(true)
             await api.deleteClient(name).then(() => showSuccessAlert('Klient ' + name +' został usunięty'))
-        } catch (error){
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas usuwania klienta ' + name)
+            showErrorAlert(error.response.data)
         } finally {
             setIsDeleting(false)
         }

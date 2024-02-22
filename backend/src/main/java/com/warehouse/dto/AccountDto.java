@@ -20,13 +20,12 @@ public class AccountDto implements UserDetails {
     private UUID id;
 
     @JsonProperty("username")
-    @Size(min = 6, max = 20, message = "Username must be between 6 and 20 characters")
+    @Size(min = 6, max = 20, message = "Nazwa użytkownika musi mieć od 6 do 20 znaków.")
     private String username;
 
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and " +
-                    "one special character."
+            message = "Hasło musi zawierać co najmniej jedną małą literę, jedną dużą literę, jedną cyfrę, jeden znak specjalny i mieć co najmniej 8 znaków."
     )
     private String password;
 

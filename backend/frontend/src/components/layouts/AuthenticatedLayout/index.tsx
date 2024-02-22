@@ -78,16 +78,32 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                         <Button
                             onClick={() => {
                                 setShowBox(false)
-                                navigate(Pathnames.viewer.reservations)
+                                navigate(Pathnames.viewer.reservationsHistory)
                             }}
                             sx={{
-                                my: 1, color: 'white', '&:hover': {
+                                my: 1, color: 'white',
+                                '&:hover': {
                                     backgroundColor: '#277ec9',
                                 },
                             }}
                         >
-                            Rezerwacje
+                            Historia zamówień
                         </Button>
+                        {isUser && (
+                            <Button
+                                onClick={() => {
+                                    setShowBox(false)
+                                    navigate(Pathnames.user.reservations)
+                                }}
+                                sx={{
+                                    my: 1, color: 'white', '&:hover': {
+                                        backgroundColor: '#277ec9',
+                                    },
+                                }}
+                            >
+                                Zamówienia
+                            </Button>
+                        )}
                         {isUser && (
                             <Button
                                 onClick={() => {

@@ -52,7 +52,7 @@ export const DeliveryPageComponent = () => {
     return (
         <div>
             <FormContainer>
-                <form onSubmit={handleSubmit}>
+                <form>
                     {inputFields.map((inputField, index) => (
                         <div key={index} className={'product'}>
                             {!isFetching &&
@@ -74,6 +74,7 @@ export const DeliveryPageComponent = () => {
                                 >
                                 </Autocomplete>}
                             <Select
+                                id="delivery-page-select-unit"
                                 name="unit"
                                 label="Jednostka"
                                 variant="filled"
@@ -108,7 +109,7 @@ export const DeliveryPageComponent = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        type="submit"
+                        type="button"
                         disabled={isUpdating}
                         onClick={handleSubmit}
                     >

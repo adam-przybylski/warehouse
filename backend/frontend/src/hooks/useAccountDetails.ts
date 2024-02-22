@@ -12,9 +12,9 @@ export const useAccountDetails = () => {
             setIsFetching(true)
             const {data} = await api.getAccount(login)
             setAccount(data)
-        } catch (err) {
-            console.error(err)
-            showErrorAlert('Nie znaleziono konta ' + login)
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
         } finally {
             setIsFetching(false)
         }
@@ -25,9 +25,9 @@ export const useAccountDetails = () => {
         try {
             setIsUpdating(true)
             await api.updatePassword(username, password).then(() => showSuccessAlert('Hasło konta ' + username + ' zostało zaktualizowane'))
-        } catch (err) {
-            console.error(err)
-            showErrorAlert('Wystąpił błąd podczas aktualizacji hasła konta ' + username)
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
         } finally {
             setIsUpdating(false)
         }
@@ -37,9 +37,9 @@ export const useAccountDetails = () => {
         try {
             setIsUpdating(true)
             await api.enableAccount(username).then(() => showSuccessAlert('Konto ' + username + ' zostało odblokowane'))
-        } catch (err) {
-            console.error(err)
-            showErrorAlert('Wystąpił błąd podczas blokowania konta ' + username)
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
         } finally {
             setIsUpdating(false)
         }
@@ -49,9 +49,9 @@ export const useAccountDetails = () => {
         try {
             setIsUpdating(true)
             await api.disableAccount(username).then(() => showSuccessAlert('Konto ' + username + ' zostało zablokowane'))
-        } catch (err) {
-            console.error(err)
-            showErrorAlert('Wystąpił błąd podczas blokowania konta ' + username)
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
         } finally {
             setIsUpdating(false)
         }

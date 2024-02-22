@@ -13,9 +13,9 @@ export const useAccounts = () => {
             const {data} = await api.getAccounts()
             const sortedAccounts = data.sort((a: AccountType, b: AccountType) => a.username.localeCompare(b.username))
             setAccounts(sortedAccounts)
-        } catch (error) {
+        } catch (error: any) {
             console.error(JSON.stringify(error))
-            showErrorAlert('Wystąpił błąd podczas pobierania kont')
+            showErrorAlert(error.response.data)
         } finally {
             setIsFetching(false)
         }
@@ -26,8 +26,9 @@ export const useAccounts = () => {
         try {
             setIsCreating(true)
             await api.addAccount(account).then(() => showSuccessAlert('Konto ' + account.username +' zostało utworzone'))
-        } catch {
-            showErrorAlert('Wystąpił błąd podczas tworzenia konta')
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
         } finally {
             setIsCreating(false)
         }

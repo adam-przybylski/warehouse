@@ -3,6 +3,7 @@ import {ApiResponseType} from "../types/ApiResponseType.ts";
 import {AccountType} from "../types/AccountType.ts";
 import {ClientType} from "../types/ClientType.ts";
 import {ProductType} from "../types/ProductType.ts";
+import {ReservationGet, ReservationPost} from "../types/ReservationType.ts";
 
 
 export const api = {
@@ -57,5 +58,21 @@ export const api = {
     deleteProduct: (name: string):  ApiResponseType<ProductType> => {
         return apiWithConfig.delete(`/products/${name}`)
     },
+
+    getReservations: (): ApiResponseType<ReservationGet[]> => {
+        return apiWithConfig.get(`/reservations`)
+    },
+    getUndeliveredReservations: (): ApiResponseType<ReservationGet[]> => {
+        return apiWithConfig.get(`/reservations/undelivered`)
+    },
+    getDeliveredReservations: (): ApiResponseType<ReservationGet[]> => {
+        return apiWithConfig.get(`/reservations/delivered`)
+    },
+    addReservation: (reservation: ReservationPost): ApiResponseType<ReservationGet> => {
+        return apiWithConfig.post(`/reservations`, {...reservation})
+    },
+    updateReservationStatus: (id: string): ApiResponseType<ReservationGet> => {
+        return apiWithConfig.patch(`/reservations/${id}`)
+    }
 
 }

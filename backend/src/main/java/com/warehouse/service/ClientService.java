@@ -21,13 +21,13 @@ public class ClientService {
     }
 
     public Client getClientByName(String name) {
-        return clientRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Client with name " + name + " not found"));
+        return clientRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Klient o nazwie " + name + " nie istnieje"));
     }
 
     public Client addClient(ClientDto clientDto) {
         Client client = new Client(clientDto.getName(), clientDto.getCity());
         if(clientRepository.findByName(clientDto.getName()).isPresent()) {
-            throw new IllegalArgumentException("Client with name " + clientDto.getName() + " already exists");
+            throw new IllegalArgumentException("Klient o podanej nazwie już istnieje");
         }
         clientRepository.save(client);
         return getClientByName(clientDto.getName());

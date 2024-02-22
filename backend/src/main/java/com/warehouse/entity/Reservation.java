@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,13 +34,13 @@ public class Reservation {
     @JoinTable(name = "product_reservation",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products;
+    private List<ArchivedProduct> products;
 
     @Column(name = "reservationDate", nullable = false)
-    private LocalDateTime reservationDate;
+    private LocalDate reservationDate;
 
     @Column(name = "deliveryDate", nullable = false)
-    private LocalDateTime deliveryDate;
+    private LocalDate deliveryDate;
 
     @Column(name = "paymentConfirmation", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -52,7 +53,7 @@ public class Reservation {
     @Column(name = "isDelivered", nullable = false)
     private boolean isDelivered;
 
-    public Reservation(Client client, List<Product> products, LocalDateTime reservationDate, LocalDateTime deliveryDate,
+    public Reservation(Client client, List<ArchivedProduct> products, LocalDate reservationDate, LocalDate deliveryDate,
                        PaymentConfirmation paymentConfirmation, DeliveryType deliveryType) {
         this.client = client;
         this.products = products;

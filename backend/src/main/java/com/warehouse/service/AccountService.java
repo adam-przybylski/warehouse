@@ -26,7 +26,7 @@ public class AccountService {
     public AccountDto findByUsername(String username) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            throw new IllegalArgumentException("Account with this username does not exist");
+            throw new IllegalArgumentException("Konto z podaną nazwą użytkownika nie istnieje");
         }
         return new AccountDto(account.getId(),account.getUsername(), account.getAuthority().getAuthority(), account.isEnabled());
     }
@@ -43,7 +43,7 @@ public class AccountService {
     public AccountDto addAccount(AccountDto accountDto) {
         Account existingAccount = accountRepository.findByUsername(accountDto.getUsername());
         if (existingAccount != null) {
-            throw new IllegalArgumentException("Account with this username already exists");
+            throw new IllegalArgumentException("Konto z podaną nazwą użytkownika już istnieje");
         }
         AuthGrantedAuthority authority = authGrantedAuthorityRepository.findByAuthority(accountDto.getRole());
         Account account = new Account(accountDto.getUsername(), passwordEncoder.encode(accountDto.getPassword()), authority, true);
@@ -55,7 +55,7 @@ public class AccountService {
     public AccountDto enableAccount(String username) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            throw new IllegalArgumentException("Account with this username does not exist");
+            throw new IllegalArgumentException("Konto z podaną nazwą użytkownika nie istnieje");
         }
         account.setEnabled(true);
         accountRepository.save(account);
@@ -65,7 +65,7 @@ public class AccountService {
     public AccountDto disableAccount(String username) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            throw new IllegalArgumentException("Account with this username does not exist");
+            throw new IllegalArgumentException("Konto z podaną nazwą użytkownika nie istnieje");
         }
         account.setEnabled(false);
         accountRepository.save(account);
@@ -75,7 +75,7 @@ public class AccountService {
     public AccountDto updatePassword(String username, AuthenticationDto authenticationDto) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            throw new IllegalArgumentException("Account with this username does not exist");
+            throw new IllegalArgumentException("Konto z podaną nazwą użytkownika nie istnieje");
         }
         account.setPassword(passwordEncoder.encode(authenticationDto.getPassword()));
         accountRepository.save(account);

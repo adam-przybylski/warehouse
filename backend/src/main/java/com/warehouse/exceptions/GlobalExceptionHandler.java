@@ -39,6 +39,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Jedno z pól jest puste");
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

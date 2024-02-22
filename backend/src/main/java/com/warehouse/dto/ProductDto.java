@@ -15,8 +15,8 @@ public class ProductDto {
     @JsonProperty("id")
     private UUID id;
 
-    @NotNull(message = "Name cannot be null")
-    @Size(min = 1, max = 250, message = "Name should have at least 1 character and maximum 250")
+    @NotNull(message = "Nazwa nie może być pusta")
+    @Size(min = 1, max = 250, message = "Nazwa powinna mieć co najmniej 1 znak i maksymalnie 250 znaków")
     @JsonProperty("name")
     private String name;
 
@@ -24,8 +24,8 @@ public class ProductDto {
     @Pattern(regexp = "bottle|carton|pack", message = "Type of package should be BOTTLE, CARTON or PACK")
     private String unit;
 
-    @NotNull(message = "Number of items cannot be null")
-    @Min(value = 0, message = "Number of items cannot be negative")
+    @NotNull(message = "Liczba sztuk nie może być pusta")
+    @Min(value = 0, message = "Liczba sztuk nie może być mniejsza od 0")
     @JsonProperty("numberOfUnits")
     private int numberOfUnits;
 
