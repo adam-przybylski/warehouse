@@ -43,21 +43,21 @@ public class WarehouseApplication {
         SpringApplication.run(WarehouseApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner runner(AccountRepository accountRepository, AuthGrantedAuthorityRepository authGrantedAuthorityRepository) {
-        return args -> {
-            AuthGrantedAuthority admin = new AuthGrantedAuthority("ADMIN");
-            AuthGrantedAuthority user = new AuthGrantedAuthority("USER");
-            AuthGrantedAuthority viewer = new AuthGrantedAuthority("VIEWER");
-            authGrantedAuthorityRepository.saveAll(List.of(admin, user, viewer));
-            Account account = new Account("testAdmin", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", admin, true);
-            Account account1 = new Account("testUser", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", user, true);
-            Account account2 = new Account("viewer", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", viewer, true);
-            accountRepository.save(account);
-            accountRepository.save(account1);
-            accountRepository.save(account2);
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner(AccountRepository accountRepository, AuthGrantedAuthorityRepository authGrantedAuthorityRepository) {
+//        return args -> {
+//            AuthGrantedAuthority admin = new AuthGrantedAuthority("ADMIN");
+//            AuthGrantedAuthority user = new AuthGrantedAuthority("USER");
+//            AuthGrantedAuthority viewer = new AuthGrantedAuthority("VIEWER");
+//            authGrantedAuthorityRepository.saveAll(List.of(admin, user, viewer));
+//            Account account = new Account("testAdmin", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", admin, true);
+//            Account account1 = new Account("testUser", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", user, true);
+//            Account account2 = new Account("viewer", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", viewer, true);
+//            accountRepository.save(account);
+//            accountRepository.save(account1);
+//            accountRepository.save(account2);
+//        };
+//    }
 
 
 }

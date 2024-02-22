@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import {ReservationPost} from "../../../types/ReservationType.ts";
 
 
-const solveUnit = (unit: UnitEnum) => {
+export const solveUnit = (unit: UnitEnum) => {
     if (unit.toString().toLocaleLowerCase() == UnitEnum.BOTTLE.toString().toLocaleLowerCase()) {
         return 'Butelka';
     } else if (unit.toString().toLocaleLowerCase() == UnitEnum.CARTON.toString().toLocaleLowerCase()) {
@@ -99,11 +99,14 @@ export const ReservationsPageComponent = () => {
             deliveryDate: selectedDate,
             products: productsFields
         }
-        addReservation(reservation)
+        addReservation(reservation);
     }
 
     const handleRemoveFields = (index: number) => {
         const values = [...productsFields];
+        if (values.length <= 1) {
+            return;
+        }
         values.splice(index, 1);
         setProductsFields(values);
     };

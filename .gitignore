@@ -71,3 +71,6 @@ package-lock.json
 ## SSL ##
 keystore.jks
 keystore.p12
+
+## SQL ##
+warehouse.sql

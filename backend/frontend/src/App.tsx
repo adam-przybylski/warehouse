@@ -19,7 +19,7 @@ const AlertListener = () => {
         <Snackbar open={!!alert} autoHideDuration={6000} onClose={hideAlert}>
             <SnackbarContent
                 message={alert?.message}
-                style={{backgroundColor: alert?.variant === 'error' ? colors.error : colors.success}}
+                style={{backgroundColor: alert?.variant === 'error' ? colors.error : colors.success, fontSize: "1.2rem"}}
             />
         </Snackbar>
     )

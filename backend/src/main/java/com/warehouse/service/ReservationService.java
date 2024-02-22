@@ -56,10 +56,6 @@ public class ReservationService {
             throw new IllegalArgumentException("Brak produktów w rezerwacji");
         }
 
-        if (reservationDto.getDeliveryDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Data dostawy nie może być z przeszłości");
-        }
-
         for (ProductDto productDto : reservationDto.getProducts()) {
             Product product = productService.getProductByName(productDto.getName());
 
@@ -114,5 +110,11 @@ public class ReservationService {
             }
             default -> throw new IllegalArgumentException("Nieprawidłowy status rezerwacji");
         }
+    }
+
+    public void deleteReservationById(String id) {
+        Reservation reservation = getReservationById(id);
+        archivedProductRepository.deleteAll(reservation.getProducts());
+        reservationRepository.delete(reservation);
     }
 }

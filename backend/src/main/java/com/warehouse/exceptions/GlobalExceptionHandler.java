@@ -1,5 +1,6 @@
 package com.warehouse.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(NullPointerException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Jedno z pól jest puste");
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e){
+        String[] message = e.getMessage().split(":");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message[message.length-1]);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

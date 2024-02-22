@@ -59,7 +59,7 @@ export const useReservations = () => {
     const [isAdding, setIsAdding] = useState(false)
     const addReservation = async (reservation: ReservationPost) => {
         try {
-            setIsFetching(true)
+            setIsAdding(true)
             await api.addReservation(reservation).then(() => showSuccessAlert('Rezerwacja została dodana'))
         } catch (error: any) {
             console.error(JSON.stringify(error))
@@ -69,15 +69,30 @@ export const useReservations = () => {
         }
     }
 
-    const updateReservation = async (reservation: ReservationPost) => {
+    const [isUpdating, setIsUpdating] = useState(false)
+
+    const updateReservation = async (id: string) => {
         try {
-            setIsFetching(true)
-            await api.addReservation(reservation).then(() => showSuccessAlert('Rezerwacja została zaktualizowana'))
+            setIsUpdating(true)
+            await api.updateReservationStatus(id).then(() => showSuccessAlert('Rezerwacja została zaktualizowana'))
         } catch (error: any) {
             console.error(JSON.stringify(error))
             showErrorAlert(error.response.data)
         } finally {
-            setIsFetching(false)
+            setIsUpdating(false)
+        }
+    }
+
+    const [isDeleting, setIsDeleting] = useState(false)
+    const deleteReservation = async (id: string) => {
+        try {
+            setIsDeleting(true)
+            await api.deleteReservation(id).then(() => showSuccessAlert('Rezerwacja została usunięta'))
+        } catch (error: any) {
+            console.error(JSON.stringify(error))
+            showErrorAlert(error.response.data)
+        } finally {
+            setIsDeleting(false)
         }
     }
 
@@ -87,11 +102,14 @@ export const useReservations = () => {
         undeliveredReservations,
         isFetching,
         isAdding,
+        isUpdating,
+        isDeleting,
         fetchReservations,
         fetchDeliveredReservations,
         fetchUndeliveredReservations,
         addReservation,
-        updateReservation
+        updateReservation,
+        deleteReservation
     }
 
 }

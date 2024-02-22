@@ -14,11 +14,13 @@ import {
 import {LoaderComponent} from "../../../components/Loader";
 import {AddClientModalComponent} from "../../../components/AddClientModal";
 import {ClientType} from "../../../types/ClientType.ts";
+import {useAccount} from "../../../hooks/useAccount.ts";
 
 export const ClientsPageComponent = () => {
     const {clients, isFetching, fetchClients, isDeleting, deleteClient} = useClients()
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [filteredClients, setFilteredClients] = useState<ClientType[] | null>([]);
+    const {isUser} = useAccount()
 
     useEffect(() => {
         if (!clients) {
@@ -82,12 +84,16 @@ export const ClientsPageComponent = () => {
                                 {client.city}
                             </TableCell>
                             <TableCell align="right">
-                                <Button variant="contained" color="primary"
-                                        onClick={() => handleDeleteClient(client.name)}
-                                        disabled={isDeleting}
-                                >
-                                    USUŃ
-                                </Button>
+                                {
+                                    isUser &&
+                                    <Button variant="contained" color="primary"
+                                            onClick={() => handleDeleteClient(client.name)}
+                                            disabled={isDeleting}
+                                    >
+                                        USUŃ
+                                    </Button>
+                                }
+
                             </TableCell>
                         </TableRow>
                     ))}
@@ -102,9 +108,14 @@ export const ClientsPageComponent = () => {
                 <Button variant="contained" onClick={fetchClients} disabled={isFetching} sx={{my: 2, mr: 1}}>
                     Odśwież
                 </Button>
-                <Button variant="contained" onClick={openAddClientModal} sx={{my: 2}}>
-                    Dodaj nowego klienta
-                </Button>
+
+                {
+                    isUser &&
+                    <Button variant="contained" onClick={openAddClientModal} sx={{my: 2}}>
+                        Dodaj nowego klienta
+                    </Button>
+                }
+
                 <TextField
                     type="text"
                     label="Szukaj"

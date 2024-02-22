@@ -49,5 +49,10 @@ public class ReservationController {
         return reservationService.addReservation(reservationDto);
     }
 
+    @DeleteMapping(value = "/{reservationId}", produces = "application/json")
+    public void deleteReservation(@PathVariable String reservationId) {
+        reservationService.deleteReservationById(reservationId);
+    }
+
 
 }

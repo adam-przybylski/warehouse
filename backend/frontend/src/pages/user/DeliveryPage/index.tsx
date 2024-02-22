@@ -45,6 +45,9 @@ export const DeliveryPageComponent = () => {
 
     const handleRemoveFields = (index: number) => {
         const values = [...inputFields];
+        if (values.length <= 1) {
+            return;
+        }
         values.splice(index, 1);
         setInputFields(values);
     };

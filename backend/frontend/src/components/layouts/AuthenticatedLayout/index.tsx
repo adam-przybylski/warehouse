@@ -1,6 +1,6 @@
 import {AppBar, Button, Container, IconButton, Toolbar, Typography} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
-import {ReactNode, useState} from 'react'
+import {ReactNode, useEffect, useState} from 'react'
 import {Pathnames} from '../../../router/pathnames'
 import {useNavigate} from 'react-router-dom'
 import {useAccount} from '../../../hooks/useAccount'
@@ -12,10 +12,16 @@ interface AuthenticatedLayoutProps {
 
 export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) => {
     const navigate = useNavigate()
-    const {isUser, isAdmin} = useAccount()
+    const {isUser, isAdmin, loggedAccount, getCurrentAccount} = useAccount()
     const {logOut} = useAccount()
 
     const [showBox, setShowBox] = useState(false);
+
+
+    useEffect(() => {
+        if (!loggedAccount) getCurrentAccount()
+
+    }, []);
 
     const handleClickShowBox = () => setShowBox(!showBox);
 
@@ -32,8 +38,12 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h5" sx={{mx: 0, color: 'white'}}>
+                    <Typography variant="h6" sx={{mx: 0, color: 'white'}}>
                         {name}
+                    </Typography>
+
+                    <Typography sx={{mr: 1, color: 'white', marginLeft: '1rem',}}>
+                        {loggedAccount?.username}
                     </Typography>
                     <Button onClick={logOut} sx={{
                         mx: 1, color: 'white', marginLeft: 'auto',
@@ -101,7 +111,7 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                                     },
                                 }}
                             >
-                                Zamówienia
+                                Utwórz zamówienie
                             </Button>
                         )}
                         {isUser && (
@@ -139,7 +149,7 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                 }
             </AppBar>
 
-            <Container sx={{p: 2}}>{children}</Container>
+            <Container maxWidth={false} sx={{p: 2}}>{children}</Container>
         </div>
     )
 }

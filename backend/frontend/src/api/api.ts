@@ -73,6 +73,9 @@ export const api = {
     },
     updateReservationStatus: (id: string): ApiResponseType<ReservationGet> => {
         return apiWithConfig.patch(`/reservations/${id}`)
+    },
+    deleteReservation: (id: string): ApiResponseType<ReservationGet> => {
+        return apiWithConfig.delete(`/reservations/${id}`)
     }
 
 }
