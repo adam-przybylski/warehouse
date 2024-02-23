@@ -78,7 +78,6 @@ export const ReservationsPageComponent = () => {
     }
 
     const handleDateChange = (date: any) => {
-        console.log(selectedDate)
         const formattedDate = dayjs(date).format("YYYY-MM-DD");
         setSelectedDate(formattedDate)
     };

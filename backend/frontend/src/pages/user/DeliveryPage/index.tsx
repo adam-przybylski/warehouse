@@ -69,7 +69,6 @@ export const DeliveryPageComponent = () => {
                                         if (value) {
                                             const values: ProductType[] = [...inputFields];
                                             values[index].name = value;
-                                            console.log(value)
                                             setInputFields(values);
                                         }
                                     }}
