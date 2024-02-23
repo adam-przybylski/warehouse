@@ -1,12 +1,23 @@
 import {useReservations} from "../../../hooks/useReservations.ts";
 import {useEffect, useState} from "react";
 import {ReservationGet} from "../../../types/ReservationType.ts";
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow
+} from "@mui/material";
 import {LoaderComponent} from "../../../components/Loader";
 import {solveUnit} from "../../user/ReservationsPage";
 import {PaymentConfirmationEnum} from "../../../enums/PaymentConfirmationEnum.enum.ts";
 import {DeliveryTypeEnum} from "../../../enums/DeliveryTypeEnum.enum.ts";
 import {useAccount} from "../../../hooks/useAccount.ts";
+import {ConfirmModalComponent} from "../../../components/ConfirmModal";
 
 const solvePaymentConfirmation = (paymentConfirmation: string) => {
     if (paymentConfirmation.toLowerCase() === PaymentConfirmationEnum.INVOICE.toString().toLowerCase()) {
@@ -41,6 +52,23 @@ export const ReservationsHistoryPageComponent = () => {
 
     const {isUser} = useAccount()
 
+    const [isConfirmDeliveredModalOpen, setIsConfirmDeliveredModalOpen] = useState(false)
+    const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false)
+
+    const handlechangepage = (event: any, newpage: number) => {
+        event.preventDefault()
+        pagechange(newpage)
+    }
+    const handleRowsPerPage = (event: any) => {
+        event.preventDefault()
+        rowperpagechange(+event.target.value)
+        pagechange(0);
+    }
+
+    const [rows, rowchange] = useState<ReservationGet[] | null>([]);
+    const [page, pagechange] = useState(0);
+    const [rowperpage, rowperpagechange] = useState(5);
+
     useEffect(() => {
         if (!reservations) {
             fetchReservations()
@@ -49,6 +77,7 @@ export const ReservationsHistoryPageComponent = () => {
 
     useEffect(() => {
         sortReservationsByReservationDate()
+        // rowchange(sortedReservations)
     }, [reservations]);
 
     const sortReservationsByReservationDate = () => {
@@ -59,6 +88,18 @@ export const ReservationsHistoryPageComponent = () => {
             return new Date(b.reservationDate).getTime() - new Date(a.reservationDate).getTime()
         })
         setSortedReservations(sorted)
+        rowchange(sorted)
+    }
+
+    const sortReservationsByClientName = () => {
+        if (!reservations) {
+            return
+        }
+        const sorted = [...reservations].sort((a, b) => {
+            return a.client.name.localeCompare(b.client.name)
+        })
+        setSortedReservations(sorted)
+        rowchange(sorted)
     }
 
     const handleUpdate = (id: string) => {
@@ -69,6 +110,22 @@ export const ReservationsHistoryPageComponent = () => {
         deleteReservation(id).then(fetchReservations)
     }
 
+    const openConfirmDeliveredModal = () => {
+        setIsConfirmDeliveredModalOpen(true)
+    }
+
+    const openConfirmDeleteModal = () => {
+        setIsConfirmDeleteModalOpen(true)
+    }
+
+    const closeConfirmDeliveredModal = () => {
+        setIsConfirmDeliveredModalOpen(false)
+    }
+
+    const closeConfirmDeleteModal = () => {
+        setIsConfirmDeleteModalOpen(false)
+    }
+
     const renderTable = () => {
         if (!sortedReservations || sortedReservations.length === 0) {
             return <div>Brak wyników</div>
@@ -77,8 +134,8 @@ export const ReservationsHistoryPageComponent = () => {
             <Table sx={{minWidth: 500}}>
                 <TableHead sx={{background: '#605f5f'}}>
                     <TableRow>
-                        <TableCell sx={{color: '#ffffff', fontSize: '1.1rem'}}>Nazwa klienta</TableCell>
-                        <TableCell sx={{color: '#ffffff', fontSize: '1.1rem', textAlign: 'center'}}>Data
+                        <TableCell onClick={sortReservationsByClientName} sx={{color: '#ffffff', fontSize: '1.1rem', cursor: 'pointer'}}>Nazwa klienta</TableCell>
+                        <TableCell onClick={sortReservationsByReservationDate} sx={{color: '#ffffff', fontSize: '1.1rem', textAlign: 'center', cursor: 'pointer'}}>Data
                             rezerwacji</TableCell>
                         <TableCell sx={{color: '#ffffff', fontSize: '1.1rem', textAlign: 'center'}}>Data
                             dostawy</TableCell>
@@ -94,7 +151,7 @@ export const ReservationsHistoryPageComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                    {sortedReservations.map(({
+                    {rows && rows.slice(page * rowperpage, page * rowperpage + rowperpage).map(({
                                                  id,
                                                  client,
                                                  reservationDate,
@@ -114,8 +171,8 @@ export const ReservationsHistoryPageComponent = () => {
                                 sx={{textAlign: 'center'}}>{solvePaymentConfirmation(paymentConfirmation)}</TableCell>
                             <TableCell sx={{textAlign: 'center'}}>
                                 <ol>
-                                    {products.map(({name, unit, numberOfUnits}) => (
-                                        <li key={name}>{name} - {numberOfUnits} x {solveUnit(unit)}</li>
+                                    {products.map(({id,name, unit, numberOfUnits}) => (
+                                        <li key={id}>{name} - {numberOfUnits} x {solveUnit(unit)}</li>
                                     ))}
                                 </ol>
                             </TableCell>
@@ -124,7 +181,7 @@ export const ReservationsHistoryPageComponent = () => {
                                     isUser &&
                                     <Button
                                         variant="contained"
-                                        onClick={() => handleUpdate(id)}
+                                        onClick={openConfirmDeliveredModal}
                                         disabled={isUpdating}
                                         sx={{mr: 1, background: '#057505', color: '#ffffff', fontSize: '0.8em'}}
                                     >
@@ -133,15 +190,38 @@ export const ReservationsHistoryPageComponent = () => {
                                 }
                                 {
                                     isUser &&
+                                    <ConfirmModalComponent
+                                        title={'Potwierdzenie dostarczenia'}
+                                        open={isConfirmDeliveredModalOpen}
+                                        handleConfirm={() => handleUpdate(id)}
+                                        handleClose={closeConfirmDeliveredModal}
+                                        children={<p>Czy na pewno chcesz potwierdzić dostarczenie zamówienia klienta {client.name}?</p>}
+                                    />
+                                }
+
+
+                                {
+                                    isUser &&
                                     <Button
                                         variant="contained"
                                         color="error"
                                         disabled={isDeleting}
-                                        onClick={() => handleDelete(id)}
+                                        onClick={openConfirmDeleteModal}
                                         sx={{ml: 1, fontSize: '0.8em'}}
                                     >
                                         Usuń
                                     </Button>
+                                }
+
+                                {
+                                    isUser &&
+                                    <ConfirmModalComponent
+                                        title={'Usuwanie zamówienia'}
+                                        open={isConfirmDeleteModalOpen}
+                                        handleConfirm={() => handleDelete(id)}
+                                        handleClose={closeConfirmDeleteModal}
+                                        children={<p>Czy na pewno chcesz usunąć zamówienie klienta {client.name}?</p>}
+                                    />
                                 }
 
                             </TableCell>
@@ -171,6 +251,16 @@ export const ReservationsHistoryPageComponent = () => {
                 <TableContainer>
                     {isFetching ? <LoaderComponent small/> : renderTable()}
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPage={rowperpage}
+                    page={page}
+                    count={rows?.length || 0}
+                    component="div"
+                    onPageChange={handlechangepage}
+                    onRowsPerPageChange={handleRowsPerPage}
+                >
+                </TablePagination>
             </Paper>
         </div>
 

@@ -7,6 +7,7 @@ import {ReservationsPageComponent} from "../pages/user/ReservationsPage";
 import {DeliveryPageComponent} from "../pages/user/DeliveryPage";
 import {ClientsPageComponent} from "../pages/viewer/ClientsPage";
 import {ReservationsHistoryPageComponent} from "../pages/viewer/ReservationsHistoryPage";
+import {UndeliveredReservationsPageComponent} from "../pages/viewer/UndeliveredReservations";
 
 export const adminRoutes: RouteType[] = [
     {
@@ -24,7 +25,7 @@ export const userRoutes: RouteType[] = [
     },
     {
         path: Pathnames.user.reservations,
-        name: 'Zamówienia',
+        name: 'Utwórz zamówienie',
         Component: ReservationsPageComponent,
     },
 ]
@@ -44,6 +45,11 @@ export const viewerRoutes: RouteType[] = [
         path: Pathnames.viewer.reservationsHistory,
         name: 'Historia zamówień',
         Component: ReservationsHistoryPageComponent,
+    },
+    {
+        path: Pathnames.viewer.undeliveredReservations,
+        name: 'Niezrealizowane zamówienia',
+        Component: UndeliveredReservationsPageComponent,
     },
 
 ]

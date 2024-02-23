@@ -15,12 +15,14 @@ import {LoaderComponent} from "../../../components/Loader";
 import {AddClientModalComponent} from "../../../components/AddClientModal";
 import {ClientType} from "../../../types/ClientType.ts";
 import {useAccount} from "../../../hooks/useAccount.ts";
+import {ConfirmModalComponent} from "../../../components/ConfirmModal";
 
 export const ClientsPageComponent = () => {
     const {clients, isFetching, fetchClients, isDeleting, deleteClient} = useClients()
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [filteredClients, setFilteredClients] = useState<ClientType[] | null>([]);
     const {isUser} = useAccount()
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
 
     useEffect(() => {
         if (!clients) {
@@ -55,6 +57,14 @@ export const ClientsPageComponent = () => {
         deleteClient(name).then(fetchClients)
     }
 
+    const openConfirmModal = () => {
+        setIsConfirmModalOpen(true)
+    }
+
+    const closeConfirmModal = () => {
+        setIsConfirmModalOpen(false)
+    }
+
 
     const renderTable = () => {
         if (!filteredClients || filteredClients.length === 0) {
@@ -87,7 +97,7 @@ export const ClientsPageComponent = () => {
                                 {
                                     isUser &&
                                     <Button variant="contained" color="primary"
-                                            onClick={() => handleDeleteClient(client.name)}
+                                            onClick={openConfirmModal}
                                             disabled={isDeleting}
                                     >
                                         USUŃ
@@ -95,6 +105,17 @@ export const ClientsPageComponent = () => {
                                 }
 
                             </TableCell>
+                            {
+                                isUser &&
+                                <ConfirmModalComponent
+                                    title={'Usuwanie klienta'}
+                                    open={isConfirmModalOpen}
+                                    handleConfirm={() => handleDeleteClient(client.name)}
+                                    handleClose={closeConfirmModal}
+                                    children={<p>Czy na pewno chcesz usunąć klienta {client.name}?</p>}
+                                />
+                            }
+
                         </TableRow>
                     ))}
                 </TableBody>

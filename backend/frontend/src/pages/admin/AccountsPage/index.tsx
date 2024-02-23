@@ -7,6 +7,7 @@ import {ChangePasswordModalComponent} from "../../../components/ChangePasswordMo
 import {AccountType} from "../../../types/AccountType.ts";
 import {ButtonsContainer} from './styles'
 import {useAccountDetails} from "../../../hooks/useAccountDetails.ts";
+import {ConfirmModalComponent} from "../../../components/ConfirmModal";
 
 
 export const AccountsPageComponent = () => {
@@ -16,6 +17,8 @@ export const AccountsPageComponent = () => {
 
     const [account, setAccount] = useState<AccountType | null>(null)
     const [isUpdatePasswordModalOpen, setIsUpdatePasswordModalOpen] = useState(false)
+
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
 
     const {isUpdating, enableAccount, disableAccount} = useAccountDetails()
 
@@ -32,6 +35,14 @@ export const AccountsPageComponent = () => {
     const closeCreateModal = () => {
         setIsCreateModalOpen(false)
         fetchAccounts()
+    }
+
+    const openConfirmModal = () => {
+        setIsConfirmModalOpen(true)
+    }
+
+    const closeConfirmModal = () => {
+        setIsConfirmModalOpen(false)
     }
 
     const handleEnableDisableAccount = (username: string, enabled: undefined | boolean) => {
@@ -91,23 +102,43 @@ export const AccountsPageComponent = () => {
                             </TableCell>
                             <TableCell component="th" scope="row" sx={{fontSize: '1.1rem'}}>
                                 <ButtonsContainer>
-                                    <Button sx={{padding: 0}} onClick={(e) => {
-                                        e.stopPropagation()
-                                        openUpdatePasswordModal({id, username, role, enabled})
-                                    }}>
+                                    <Button
+                                        sx={{padding: 0, background: '#057505', color: '#ffffff'}}
+                                        variant="contained"
+                                        disabled={isUpdating}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            openUpdatePasswordModal({id, username, role, enabled})
+                                        }}>
                                         Zmień hasło
                                     </Button>
 
-                                    <Button sx={{padding: 0}} disabled={isUpdating} onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleEnableDisableAccount(username, enabled)
-                                    }}>
+                                    <Button
+                                        sx={{padding: 0, mt:1}}
+                                        disabled={isUpdating}
+                                        variant="contained"
+                                        color="error"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            openConfirmModal()
+                                        }}>
                                         {enabled ? 'Zablokuj' : 'Odblokuj'}
                                     </Button>
-
                                 </ButtonsContainer>
-
                             </TableCell>
+
+                            <ConfirmModalComponent
+                                title={
+                                    enabled ?
+                                        `Blokowanie konta` :
+                                        `Odblokowanie konta`
+                                }
+                                open={isConfirmModalOpen}
+                                handleConfirm={() => handleEnableDisableAccount(username, enabled)}
+                                handleClose={closeConfirmModal}
+                                children={enabled ? <p>Czy na pewno chcesz zablokować konto {username}?</p> :
+                                    <p>Czy na pewno chcesz odblokować konto {username}?</p>}
+                            />
                         </TableRow>
                     ))}
                 </TableBody>

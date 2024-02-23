@@ -63,10 +63,10 @@ export const api = {
         return apiWithConfig.get(`/reservations`)
     },
     getUndeliveredReservations: (): ApiResponseType<ReservationGet[]> => {
-        return apiWithConfig.get(`/reservations/undelivered`)
+        return apiWithConfig.get(`/reservations/status/undelivered`)
     },
     getDeliveredReservations: (): ApiResponseType<ReservationGet[]> => {
-        return apiWithConfig.get(`/reservations/delivered`)
+        return apiWithConfig.get(`/reservations/status/delivered`)
     },
     addReservation: (reservation: ReservationPost): ApiResponseType<ReservationGet> => {
         return apiWithConfig.post(`/reservations`, {...reservation})

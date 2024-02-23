@@ -6,6 +6,7 @@ export const Pathnames = {
         availability: '/availability',
         clients: '/clients',
         reservationsHistory: '/reservations-history',
+        undeliveredReservations: '/undelivered-reservations',
     },
     user: {
         delivery: '/delivery',

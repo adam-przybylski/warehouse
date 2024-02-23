@@ -1,22 +1,20 @@
 package com.warehouse;
 
-import com.warehouse.entity.Account;
-import com.warehouse.entity.AuthGrantedAuthority;
-import com.warehouse.repository.AccountRepository;
-import com.warehouse.repository.AuthGrantedAuthorityRepository;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.List;
 
 @SpringBootApplication
 public class WarehouseApplication {
 
     public static void main(String[] args) {
 
+        loadEnvironmentVariables();
+
+        SpringApplication.run(WarehouseApplication.class, args);
+    }
+
+    public static void loadEnvironmentVariables() {
         Dotenv dotenv = Dotenv.configure().load();
 
         System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
@@ -24,6 +22,19 @@ public class WarehouseApplication {
         System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
         System.setProperty("SECRET_KEY", dotenv.get("SECRET_KEY"));
         System.setProperty("FRONTEND_URL", dotenv.get("FRONTEND_URL"));
+        System.setProperty("server.port", dotenv.get("BACKEND_PORT"));
+        System.setProperty("server.address", dotenv.get("BACKEND_ADDRESS"));
+
+        String loggingFilePath = dotenv.get("LOGGING_FILE_PATH");
+        if (loggingFilePath != null) {
+            System.setProperty("logging.file.path", loggingFilePath);
+        }
+
+        String loggingFileName = dotenv.get("LOGGING_FILE_NAME");
+        if (loggingFileName != null) {
+            System.setProperty("logging.file.name", loggingFileName);
+        }
+
 
         String keystorePassword = dotenv.get("SSL_KEYSTORE_PASSWORD");
         if (keystorePassword != null) {
@@ -40,24 +51,15 @@ public class WarehouseApplication {
             System.setProperty("server.ssl.enabled", sslEnabled);
         }
 
-        SpringApplication.run(WarehouseApplication.class, args);
+        String sslKeyStoreType = dotenv.get("SSL_KEYSTORE_TYPE");
+        if (sslKeyStoreType != null) {
+            System.setProperty("server.ssl.key-store-type", sslKeyStoreType);
+        }
+
+        String sslKeyAlias = dotenv.get("SSL_KEY_ALIAS");
+        if (sslKeyAlias != null) {
+            System.setProperty("server.ssl.key-alias", sslKeyAlias);
+        }
     }
-
-//    @Bean
-//    CommandLineRunner runner(AccountRepository accountRepository, AuthGrantedAuthorityRepository authGrantedAuthorityRepository) {
-//        return args -> {
-//            AuthGrantedAuthority admin = new AuthGrantedAuthority("ADMIN");
-//            AuthGrantedAuthority user = new AuthGrantedAuthority("USER");
-//            AuthGrantedAuthority viewer = new AuthGrantedAuthority("VIEWER");
-//            authGrantedAuthorityRepository.saveAll(List.of(admin, user, viewer));
-//            Account account = new Account("testAdmin", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", admin, true);
-//            Account account1 = new Account("testUser", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", user, true);
-//            Account account2 = new Account("viewer", "$2a$10$tVNnxTpsEkn0iKeEvtbMVeQTCAJYxp7e0ZY.yq3UhXle6dUmi.F.i", viewer, true);
-//            accountRepository.save(account);
-//            accountRepository.save(account1);
-//            accountRepository.save(account2);
-//        };
-//    }
-
 
 }

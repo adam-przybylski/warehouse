@@ -99,6 +99,20 @@ export const AuthenticatedLayout = ({children, name}: AuthenticatedLayoutProps) 
                         >
                             Historia zamówień
                         </Button>
+                        <Button
+                            onClick={() => {
+                                setShowBox(false)
+                                navigate(Pathnames.viewer.undeliveredReservations)
+                            }}
+                            sx={{
+                                my: 1, color: 'white',
+                                '&:hover': {
+                                    backgroundColor: '#277ec9',
+                                },
+                            }}
+                        >
+                            Niezrealizowane zamówienia
+                        </Button>
                         {isUser && (
                             <Button
                                 onClick={() => {
