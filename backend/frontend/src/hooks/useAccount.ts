@@ -67,6 +67,7 @@ export const useAccount = () => {
         setIsFetching(true)
         localStorage.removeItem('token')
         setLoggedAccount(null)
+        setAccount(null)
         navigate(Pathnames.public.login)
         setIsFetching(false)
         showSuccessAlert('Pomyślnie wylogowano!')

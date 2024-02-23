@@ -36,4 +36,13 @@ public class ArchivedProduct {
         this.unit = unit;
         this.numberOfUnits = numberOfUnits;
     }
+
+    @Override
+    public String toString() {
+        return "ArchivedProduct{" +
+                ", name='" + name + '\'' +
+                ", unit=" + unit +
+                ", numberOfUnits=" + numberOfUnits +
+                '}';
+    }
 }

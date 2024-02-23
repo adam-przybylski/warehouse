@@ -60,7 +60,7 @@ export const useReservations = () => {
     const addReservation = async (reservation: ReservationPost) => {
         try {
             setIsAdding(true)
-            await api.addReservation(reservation).then(() => showSuccessAlert('Rezerwacja została dodana'))
+            await api.addReservation(reservation).then(() => window.location.reload()).then(() => showSuccessAlert('Rezerwacja została dodana'))
         } catch (error: any) {
             console.error(JSON.stringify(error))
             showErrorAlert(error.response.data)

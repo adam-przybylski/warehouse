@@ -12,13 +12,15 @@ import com.warehouse.exceptions.ResourceNotFoundException;
 import com.warehouse.repository.ArchivedProductRepository;
 import com.warehouse.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -29,6 +31,7 @@ public class ReservationService {
     private final ClientService clientService;
     private final ProductService productService;
     private final ArchivedProductRepository archivedProductRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
 
     public PaymentConfirmation solvePaymentConfirmation(String paymentConfirmation) {
@@ -49,6 +52,7 @@ public class ReservationService {
     }
 
     public Reservation addReservation(ReservationDto reservationDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client client = clientService.getClientByName(reservationDto.getClientName());
         List<ArchivedProduct> products = new ArrayList<>();
 
@@ -75,12 +79,18 @@ public class ReservationService {
         Reservation reservation = new Reservation(client, products, LocalDate.now(), reservationDto.getDeliveryDate(),
                 solvePaymentConfirmation(reservationDto.getPaymentConfirmation()), solveDeliveryType(reservationDto.getDeliveryType()));
         reservationRepository.save(reservation);
+        logger.info("Rezerwacja dla klienta "
+                + reservationDto.getClientName()
+                + " została dodana na produkty: "
+                + reservation.getProducts().toString()
+                + " przez "
+                + authentication.getName());
         return reservation;
     }
 
     public Reservation getReservationById(String id) {
-        return reservationRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ResourceNotFoundException("Rezerwacja o id " + id + " nie " +
-                "istnieje"));
+        return reservationRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ResourceNotFoundException("Rezerwacja o id " + id + " nie "
+                + "istnieje"));
     }
 
     public List<Reservation> getReservationsByClientName(String name) {
@@ -93,9 +103,16 @@ public class ReservationService {
     }
 
     public Reservation markReservationAsDelivered(String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Reservation reservation = getReservationById(id);
         reservation.setDelivered(true);
         reservationRepository.save(reservation);
+        logger.info("Rezerwacja dla klienta "
+                + reservation.getClient().getName()
+                + " na produkty: "
+                + reservation.getProducts().toString()
+                + " została oznaczona jako dostarczona przez "
+                + authentication.getName());
         return reservation;
     }
 
@@ -113,8 +130,15 @@ public class ReservationService {
     }
 
     public void deleteReservationById(String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Reservation reservation = getReservationById(id);
         archivedProductRepository.deleteAll(reservation.getProducts());
+        logger.info("Rezerwacja dla klienta "
+                + reservation.getClient().getName()
+                + " na produkty: "
+                + reservation.getProducts().toString()
+                + " została usunięta przez "
+                + authentication.getName());
         reservationRepository.delete(reservation);
     }
 }

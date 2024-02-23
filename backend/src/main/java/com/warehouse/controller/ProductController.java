@@ -29,7 +29,7 @@ public class ProductController {
 
     @PutMapping(value = "{name}", produces = "application/json", consumes = "application/json")
     public Product updateNumberOfItems(@PathVariable String name, @RequestBody @Valid ProductDto productDto) {
-        return productService.updateNumberOfItems(name, productDto);
+        return productService.addNumberOfItems(name, productDto);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")

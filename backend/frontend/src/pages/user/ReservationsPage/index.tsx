@@ -99,7 +99,7 @@ export const ReservationsPageComponent = () => {
             deliveryDate: selectedDate,
             products: productsFields
         }
-        addReservation(reservation);
+        addReservation(reservation)
     }
 
     const handleRemoveFields = (index: number) => {

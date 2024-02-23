@@ -8,6 +8,8 @@ import com.warehouse.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,14 +43,16 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDto productDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Product product = new Product(productDto.getName(), solveTypeOfPackage(productDto.getUnit()),
                 productDto.getNumberOfUnits());
         productRepository.save(product);
-        logger.info("Produkt o nazwie " + productDto.getName() + " został dodany");
+        logger.info("Produkt o nazwie " + productDto.getName() + " został dodany przez " + authentication.getName());
         return getProductByName(productDto.getName());
     }
 
-    public Product updateNumberOfItems(String name, ProductDto productDto) {
+    public Product addNumberOfItems(String name, ProductDto productDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<Product> productOptional = productRepository.findByName(name);
         if (productOptional.isEmpty()) {
             addProduct(productDto);
@@ -56,26 +60,26 @@ public class ProductService {
             Product product = productOptional.get();
             product.setNumberOfUnits(productDto.getNumberOfUnits() + product.getNumberOfUnits());
             productRepository.save(product);
-            logger.info("Produkt o nazwie " + product.getName() + " został zaktualizowany");
+            logger.info("Użytkownik " + authentication.getName() + " dodał " + productDto.getNumberOfUnits() + " produkty " + product.getName());
         }
         return getProductByName(name);
     }
 
     public List<Product> updateProducts(List<ProductDto> productDtos) {
         for (ProductDto productDto : productDtos) {
-            updateNumberOfItems(productDto.getName(), productDto);
+            addNumberOfItems(productDto.getName(), productDto);
         }
         return getAllProducts();
     }
 
     public void updateNumberOfItems(Product product) {
         productRepository.save(product);
-        logger.info("Product with name " + product.getName() + " updated");
     }
 
     public void deleteProduct(String name) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Product product = getProductByName(name);
         productRepository.delete(product);
-        logger.info("Product with name " + product.getName() + " deleted");
+        logger.info("Produkt " + product.getName() + " został usunięty prze " + authentication.getName());
     }
 }
