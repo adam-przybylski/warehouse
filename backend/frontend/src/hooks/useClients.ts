@@ -38,7 +38,7 @@ export const useClients = () => {
 
     const [isDeleting, setIsDeleting] = useState(false)
 
-    const deleteClient = async (name: string) => {
+    const deleteClient = async (name: string | undefined) => {
         try {
             setIsDeleting(true)
             await api.deleteClient(name).then(() => showSuccessAlert('Klient ' + name +' został usunięty'))

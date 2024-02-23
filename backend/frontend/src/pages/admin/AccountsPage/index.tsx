@@ -37,19 +37,21 @@ export const AccountsPageComponent = () => {
         fetchAccounts()
     }
 
-    const openConfirmModal = () => {
+    const openConfirmModal = (account: AccountType) => {
+        setAccount(account)
         setIsConfirmModalOpen(true)
     }
 
     const closeConfirmModal = () => {
         setIsConfirmModalOpen(false)
+        setAccount(null)
     }
 
-    const handleEnableDisableAccount = (username: string, enabled: undefined | boolean) => {
-        if (enabled) {
-            disableAccount(username).then(() => fetchAccounts())
+    const handleEnableDisableAccount = (account: AccountType | null) => {
+        if (account?.enabled) {
+            disableAccount(account.username).then(() => fetchAccounts())
         } else {
-            enableAccount(username).then(() => fetchAccounts())
+            enableAccount(account?.username).then(() => fetchAccounts())
         }
 
     }
@@ -114,13 +116,13 @@ export const AccountsPageComponent = () => {
                                     </Button>
 
                                     <Button
-                                        sx={{padding: 0, mt:1}}
+                                        sx={{padding: 0, mt: 1}}
                                         disabled={isUpdating}
                                         variant="contained"
                                         color="error"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            openConfirmModal()
+                                            openConfirmModal({id, username, role, enabled})
                                         }}>
                                         {enabled ? 'Zablokuj' : 'Odblokuj'}
                                     </Button>
@@ -134,10 +136,10 @@ export const AccountsPageComponent = () => {
                                         `Odblokowanie konta`
                                 }
                                 open={isConfirmModalOpen}
-                                handleConfirm={() => handleEnableDisableAccount(username, enabled)}
+                                handleConfirm={() => handleEnableDisableAccount(account)}
                                 handleClose={closeConfirmModal}
-                                children={enabled ? <p>Czy na pewno chcesz zablokować konto {username}?</p> :
-                                    <p>Czy na pewno chcesz odblokować konto {username}?</p>}
+                                children={enabled ? <p>Czy na pewno chcesz zablokować konto {account?.username}?</p> :
+                                    <p>Czy na pewno chcesz odblokować konto {account?.username}?</p>}
                             />
                         </TableRow>
                     ))}

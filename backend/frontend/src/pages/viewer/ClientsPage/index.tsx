@@ -23,6 +23,7 @@ export const ClientsPageComponent = () => {
     const [filteredClients, setFilteredClients] = useState<ClientType[] | null>([]);
     const {isUser} = useAccount()
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+    const [client, setClient] = useState<ClientType | null>(null)
 
     useEffect(() => {
         if (!clients) {
@@ -53,16 +54,18 @@ export const ClientsPageComponent = () => {
         fetchClients()
     }
 
-    const handleDeleteClient = (name: string) => {
-        deleteClient(name).then(fetchClients)
+    const handleDeleteClient = () => {
+        deleteClient(client?.name).then(fetchClients)
     }
 
-    const openConfirmModal = () => {
+    const openConfirmModal = (client: ClientType) => {
+        setClient(client)
         setIsConfirmModalOpen(true)
     }
 
     const closeConfirmModal = () => {
         setIsConfirmModalOpen(false)
+        setClient(null)
     }
 
 
@@ -82,22 +85,22 @@ export const ClientsPageComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                    {filteredClients.map((client) => (
+                    {filteredClients.map(({id,name,city}) => (
                         <TableRow
-                            key={client.id}
+                            key={id}
                             hover
                         >
                             <TableCell component="th" scope="row" sx={{fontSize: '1.1rem'}}>
-                                {client.name}
+                                {name}
                             </TableCell>
                             <TableCell align="center" sx={{fontSize: '1.1rem'}}>
-                                {client.city}
+                                {city}
                             </TableCell>
                             <TableCell align="right">
                                 {
                                     isUser &&
                                     <Button variant="contained" color="primary"
-                                            onClick={openConfirmModal}
+                                            onClick={() => openConfirmModal({id,name,city})}
                                             disabled={isDeleting}
                                     >
                                         USUŃ
@@ -110,9 +113,9 @@ export const ClientsPageComponent = () => {
                                 <ConfirmModalComponent
                                     title={'Usuwanie klienta'}
                                     open={isConfirmModalOpen}
-                                    handleConfirm={() => handleDeleteClient(client.name)}
+                                    handleConfirm={handleDeleteClient}
                                     handleClose={closeConfirmModal}
-                                    children={<p>Czy na pewno chcesz usunąć klienta {client.name}?</p>}
+                                    children={<p>Czy na pewno chcesz usunąć klienta {client?.name}?</p>}
                                 />
                             }
 

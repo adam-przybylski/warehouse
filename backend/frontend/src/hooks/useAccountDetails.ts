@@ -33,7 +33,7 @@ export const useAccountDetails = () => {
         }
     }
 
-    const enableAccount = async (username: string) => {
+    const enableAccount = async (username: string | undefined) => {
         try {
             setIsUpdating(true)
             await api.enableAccount(username).then(() => showSuccessAlert('Konto ' + username + ' zostało odblokowane'))
