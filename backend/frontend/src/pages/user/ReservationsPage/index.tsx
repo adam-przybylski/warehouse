@@ -102,18 +102,18 @@ export const ReservationsPageComponent = () => {
         addReservation(reservation)
     }
 
-    const handleRemoveFields = (index: number) => {
+    const handleRemoveFields = () => {
         const values = [...productsFields];
         if (values.length <= 1) {
             return;
         }
-        values.splice(index, 1);
+        values.splice(values.length - 1, 1);
         setProductsFields(values);
     };
 
     return <div>
         <FormContainer>
-            <form>
+            <form style={{display:'flex', flexDirection: 'column'}}>
                 <Autocomplete
                     autoSelect
                     options={clients?.map((option) => option.name) || []}
@@ -168,55 +168,55 @@ export const ReservationsPageComponent = () => {
                         <MenuItem value={PaymentConfirmationEnum.GIFT}>Zestaw upominkowy</MenuItem>
                     </Select>
                 </FormControl>
+                <div>
+                    {productsFields.map((productField, index) => (
+                        <div key={index} className={'product'}>
+                            {!isFetching &&
 
-                {productsFields.map((productField, index) => (
-                    <div key={index} className={'product'}>
-                        {!isFetching &&
+                                <Autocomplete
+                                    autoSelect
+                                    options={products?.map((option) => option.name) || []}
+                                    renderInput={(params) => <TextField {...params} label="Nazwa" variant="filled"/>}
+                                    onChange={(event, value) => {
+                                        event.preventDefault();
+                                        if (value) {
+                                            const values: ProductType[] = [...productsFields];
+                                            values[index].name = value;
+                                            values[index].unit = products?.find(product => product.name === value)?.unit || UnitEnum.BOTTLE;
+                                            setProductsFields(values);
+                                        }
+                                    }}
+                                    sx={{mr: 1, my: 1, minWidth: '20vw'}}
+                                >
+                                </Autocomplete>}
 
-                            <Autocomplete
-                                autoSelect
-                                options={products?.map((option) => option.name) || []}
-                                renderInput={(params) => <TextField {...params} label="Nazwa" variant="filled"/>}
-                                onChange={(event, value) => {
-                                    event.preventDefault();
-                                    if (value) {
-                                        const values: ProductType[] = [...productsFields];
-                                        values[index].name = value;
-                                        values[index].unit = products?.find(product => product.name === value)?.unit || UnitEnum.BOTTLE;
-                                        setProductsFields(values);
-                                    }
-                                }}
-                                sx={{mr: 1, my: 1, minWidth: '20vw'}}
-                            >
-                            </Autocomplete>}
+                            <TextField
+                                variant="filled"
+                                value={solveUnit(productField.unit)}
+                                disabled={true}
+                                sx={{mr: 1, my: 1}}
+                            />
 
-                        <TextField
-                            variant="filled"
-                            value={solveUnit(productField.unit)}
-                            disabled={true}
-                            sx={{mr: 1, my: 1}}
-                        />
+                            <TextField
+                                name="numberOfUnits"
+                                label="Liczba"
+                                variant="filled"
+                                value={productField.numberOfUnits}
+                                onChange={(event) => handleChangeProductsInput(index, event)}
+                                sx={{mr: 1, my: 1}}
+                            />
 
-                        <TextField
-                            name="numberOfUnits"
-                            label="Liczba"
-                            variant="filled"
-                            value={productField.numberOfUnits}
-                            onChange={(event) => handleChangeProductsInput(index, event)}
-                            sx={{mr: 1, my: 1}}
-                        />
+                        </div>
+                    ))}
 
-                        <IconButton onClick={() => handleRemoveFields(index)}>
-                            <RemoveIcon/>
-                        </IconButton>
+                    <IconButton onClick={() => handleRemoveFields()}>
+                        <RemoveIcon/>
+                    </IconButton>
 
-                        <IconButton onClick={() => handleAddFields()}>
-                            <AddIcon/>
-                        </IconButton>
-
-                    </div>
-                ))}
-
+                    <IconButton onClick={() => handleAddFields()}>
+                        <AddIcon/>
+                    </IconButton>
+                </div>
                 <Button
                     id="submit-reservation-button"
                     variant="contained"
@@ -224,6 +224,7 @@ export const ReservationsPageComponent = () => {
                     type="button"
                     disabled={isAdding}
                     onClick={handleSubmit}
+                    sx={{mt:2, alignSelf: 'center'}}
                 >
                     Zapisz
                 </Button>
